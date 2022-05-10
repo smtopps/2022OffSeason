@@ -21,10 +21,7 @@ public class AutoFeedBallsToShooter extends CommandBase {
 
   @Override
   public void execute() {
-    limelight.getTV();
-    limelight.getTX();
-    limelight.getTY();
-    if(RevShooter.isShooterAtSpeed == true && limelight.isTurretAligned() == true) {
+    if(/*RevShooter.isShooterAtSpeed == true && */limelight.isTurretAligned() ) {
       feeder.feederSpeed(12);
     }else{
       feeder.feederStop();

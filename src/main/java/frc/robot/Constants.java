@@ -16,8 +16,10 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER = 0;
 
     //Pneumatics Module ID and Information
-    public static final int PNEUMATIC_MODULE_ID = 20;
-    public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
+    public static final int REV_PNEUMATIC_MODULE_ID = 14;
+    public static final PneumaticsModuleType REV_PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
+    public static final int CTRE_PNEUMATICS_MODULE_ID = 13;
+    public static final PneumaticsModuleType CTRE_PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.CTREPCM;
 
     //DriveBase Motor ID and informaiton
     public static final int LEFT_LEADER_ID = 23;
@@ -51,8 +53,8 @@ public final class Constants {
     public static final int FEEDER_MOTOR_ID = 26;
 
     //Climber Motor ID and information
-    public static final int CLIMBER_LEFT_MOTOR_ID = 0;
-    public static final int CLIMBER_RIGHT_MOTOR_ID = 0;
+    public static final int CLIMBER_LEFT_MOTOR_ID = 31;
+    public static final int CLIMBER_RIGHT_MOTOR_ID = 32;
 
-    public static final int PIGEON2_ID = 0;
+    public static final int PIGEON2_ID = 4;
 }

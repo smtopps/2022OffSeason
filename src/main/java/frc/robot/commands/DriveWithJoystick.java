@@ -2,30 +2,30 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveBaseTrajectory;
+import frc.robot.subsystems.DriveBase;
 
 public class DriveWithJoystick extends CommandBase {
-  private final DriveBaseTrajectory driveBaseTrajectory;
+  private final DriveBase driveBase;
   //private final double throttle;
   //private final double rotation;
 
-  public DriveWithJoystick(DriveBaseTrajectory driveBaseTrajectory, double throttle, double rotation) {
-    this.driveBaseTrajectory = driveBaseTrajectory;
+  public DriveWithJoystick(DriveBase driveBase, double throttle, double rotation) {
+    this.driveBase = driveBase;
     //this.throttle = throttle;
     //this.rotation = rotation;
-    addRequirements(driveBaseTrajectory);
+    addRequirements(driveBase);
   }
 
   @Override
   public void initialize() {
-    driveBaseTrajectory.setmaxoutput(Constants.MAX_SPEED_DRIVE);
-    driveBaseTrajectory.setdeadband(Constants.DEADBAND_DRIVE);
-    driveBaseTrajectory.setneutralmode(Constants.NEUTRAL_MODE_DRIVE);
+    driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
+    driveBase.setdeadband(Constants.DEADBAND_DRIVE);
+    driveBase.setneutralmode(Constants.NEUTRAL_MODE_DRIVE);
   }
 
   @Override
   public void execute() {
-    driveBaseTrajectory.arcadedrive();
+    driveBase.arcadedrive();
   }
 
   @Override

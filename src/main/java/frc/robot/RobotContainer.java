@@ -20,6 +20,7 @@ import frc.robot.commands.IdleShooter;
 import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.RevShooter;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ToggleIntake;
 import frc.robot.commands.ClimberCommands.BarToBarGoup;
 import frc.robot.commands.ClimberCommands.ExtendClimber;
@@ -55,20 +56,21 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    driveBaseTrajectory.setDefaultCommand(new DriveWithJoystick(driveBaseTrajectory, driverController.getLeftY(), driverController.getLeftX()));
-    //driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, driverController.getLeftY(), driverController.getLeftX()));
+    //driveBaseTrajectory.setDefaultCommand(new DriveWithJoystick(driveBaseTrajectory, driverController.getLeftY(), driverController.getLeftX()));
+    driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, driverController.getLeftY(), driverController.getLeftX()));
     // Configure the button bindings
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, driveBaseTrajectory));
+    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, driveBase));
     new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake));
     new JoystickButton(driverController, 5).whenHeld(new RevShooter(shooter, driveBase, limelight));
     //new JoystickButton(driverController, 5).whenHeld(new AlignTurret(turret, limelight));
     //new JoystickButton(driverController, 2).whileHeld(new AutoFeedBallsToShooter(limelight, feeder));
     //new JoystickButton(driverController, 5).whenInactive(new PrepareBallsInFeeder(feeder));
     //new JoystickButton(driverController, 5).whenInactive(new IdleShooter(shooter));
+    //new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder, driveBase));
 
     //new JoystickButton(driverController, driverController.getPOV(0)).whenPressed(new ExtendClimber(climber));
     //new JoystickButton(driverController, driverController.getPOV(180)).whenPressed(new RetractClimber(climber));

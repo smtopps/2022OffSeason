@@ -25,23 +25,24 @@ public class Shooter extends SubsystemBase {
     RIGHT_SHOOTER_MOTOR.restoreFactoryDefaults();
     LEFT_SHOOTER_MOTOR.setIdleMode(IdleMode.kCoast);
     RIGHT_SHOOTER_MOTOR.setIdleMode(IdleMode.kCoast);
-    LEFT_SHOOTER_MOTOR.setSmartCurrentLimit(5);
-    RIGHT_SHOOTER_MOTOR.setSmartCurrentLimit(5);
-    LEFT_SHOOTER_MOTOR.setClosedLoopRampRate(2);
-    RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(2);
+    LEFT_SHOOTER_MOTOR.setSmartCurrentLimit(60);
+    RIGHT_SHOOTER_MOTOR.setSmartCurrentLimit(60);
+    //LEFT_SHOOTER_MOTOR.setClosedLoopRampRate(1);
+    //RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(1);
 
     //RIGHT_SHOOTER_MOTOR.follow(LEFT_SHOOTER_MOTOR);
     //RIGHT_SHOOTER_MOTOR.setInverted(true);
 
     SHOOTER_PID_LEFT = LEFT_SHOOTER_MOTOR.getPIDController();
     SHOOTER_ENCODER_LEFT = LEFT_SHOOTER_MOTOR.getEncoder();
+    SHOOTER_PID_LEFT.setFeedbackDevice(SHOOTER_ENCODER_LEFT);
 
-    SHOOTER_PID_LEFT.setP(0);
-    SHOOTER_PID_LEFT.setI(0);
-    SHOOTER_PID_LEFT.setD(0);
-    SHOOTER_PID_LEFT.setIZone(0);
     SHOOTER_PID_LEFT.setFF(0);
-    SHOOTER_PID_LEFT.setOutputRange(0, 0);
+    SHOOTER_PID_LEFT.setP(0.1);
+    //SHOOTER_PID_LEFT.setI(0);
+    //SHOOTER_PID_LEFT.setD(0);
+    //SHOOTER_PID_LEFT.setIZone(0);
+    //SHOOTER_PID_LEFT.setOutputRange(0, 0);
   }
 
   @Override
@@ -63,10 +64,10 @@ public class Shooter extends SubsystemBase {
 
   public boolean isFlywheelAtSpeed1(double RPM) {
     for(int counter=0; counter<5; counter++){
-      if(SHOOTER_ENCODER_LEFT.getVelocity() > RPM+10){
+      if(SHOOTER_ENCODER_LEFT.getVelocity() > RPM+25){
         counter = 0;
       }
-      if(SHOOTER_ENCODER_LEFT.getVelocity() < RPM-10) {
+      if(SHOOTER_ENCODER_LEFT.getVelocity() < RPM-25) {
         counter = 0;
       }
     }
@@ -76,7 +77,7 @@ public class Shooter extends SubsystemBase {
   public boolean isFlywheelAtSpeed2(double RPM) {
     int counter = 0;
     do{
-      if(SHOOTER_ENCODER_LEFT.getVelocity() < RPM+10 && SHOOTER_ENCODER_LEFT.getVelocity() > RPM-10){
+      if(SHOOTER_ENCODER_LEFT.getVelocity() < RPM+25 && SHOOTER_ENCODER_LEFT.getVelocity() > RPM-25){
         counter ++;
       }else{
         counter = 0;

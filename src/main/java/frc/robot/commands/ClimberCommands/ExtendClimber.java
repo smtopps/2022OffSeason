@@ -18,18 +18,21 @@ public class ExtendClimber extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("ExtendClimber Initialize");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("ExtendClimber Execute");
     double leftError = 20 - climber.leftClimberEncoder();
     double rightError = -20 - climber.rightClimberEncoder();
-    double leftSpeed = leftError * 0.01;
+    double leftSpeed = leftError * 0.1;
     if(leftSpeed > 0.5) {
       leftSpeed = 0.5;
     }
-    double rightSpeed = rightError * 0.01;
+    double rightSpeed = rightError * 0.1;
     if(rightSpeed < -0.5) {
       rightSpeed = -0.5;
     }
@@ -48,6 +51,7 @@ public class ExtendClimber extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("ExtendClimber End");
     climber.leftClimberStop();
     climber.rightClimberStop();
   }

@@ -13,14 +13,14 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   WPI_TalonSRX INTAKE_MOTOR;
   Solenoid INTAKE_CYLINDER;
-  public static final Compressor compressor = new Compressor(20, PneumaticsModuleType.CTREPCM);
+  public static final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
 
   public Intake() {
     INTAKE_MOTOR = new WPI_TalonSRX(Constants.INTAKE_ID);
 
     INTAKE_MOTOR.setNeutralMode(NeutralMode.Coast);
 
-    INTAKE_CYLINDER = new Solenoid(13, PneumaticsModuleType.REVPH, 8);
+    INTAKE_CYLINDER = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_POSITION);
   }
 
   @Override

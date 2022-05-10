@@ -30,7 +30,7 @@ public class AlignTurret extends CommandBase {
       if(limelight.getTX() <= 2 && limelight.getTX() >= -2) {
         turret.stopTurret();;
       }else{
-        turret.turretSpeed3(speed);
+        turret.turretSpeed(speed);
       }
     }else{
       turret.stopTurret();
@@ -39,7 +39,8 @@ public class AlignTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    //turret.centerTurret();
+    //turret.centerTurretEncoder();
+    //turret.centerTurretLimitSwitch();
     turret.stopTurret();
   }
 

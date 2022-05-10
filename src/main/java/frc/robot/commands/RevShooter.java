@@ -26,7 +26,9 @@ public class RevShooter extends CommandBase {
   }
   
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("RevShooter Scheduled");
+  }
 
   @Override
   public void execute() {

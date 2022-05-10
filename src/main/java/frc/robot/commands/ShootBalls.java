@@ -12,7 +12,7 @@ public class ShootBalls extends ParallelCommandGroup {
   public ShootBalls(Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, DriveBase drivebase) {
     addCommands(
       new AlignTurret(turret, limelight),
-      new RevShooter(shooter, drivebase, limelight),
+      //new RevShooter(shooter, drivebase, limelight),
       new AutoFeedBallsToShooter(limelight, feeder)
     );
   }

@@ -54,7 +54,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public boolean isTurretAligned() {
-    if(ta.getDouble(0.0) <= 2 && ta.getDouble(0.0) >= -2) {
+    if(tv.getDouble(0.0) == 1 && tx.getDouble(0.0) <= 2 && tx.getDouble(0.0) >= -2) {
       return true;
     }else{
       return false;
