@@ -7,6 +7,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C;
@@ -28,7 +29,9 @@ public class Feeder extends SubsystemBase {
     COLOR_SENSOR = new ColorSensorV3(i2cPort);
     COLOR_MATCHER = new ColorMatch();
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    //NetworkTable table = inst.getTable("key")
+    NetworkTable table = inst.getTable("FMSInfo");
+    ALLIANCE_COLOR = table.getEntry("isRedAlliance");
+    
     final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
     final Color kRedTarget = new Color(0.561, 0.232, 0.114);
     COLOR_MATCHER.addColorMatch(kBlueTarget);
@@ -54,9 +57,9 @@ public class Feeder extends SubsystemBase {
 
   public void getBallInFeederWithColor() {
     if(COLOR_SENSOR.getProximity() <= 5 && colorString == "Blue")  {
-      FEEDER_MOTOR.stopMotor();;
+      FEEDER_MOTOR.stopMotor();
     }else{
-      FEEDER_MOTOR.setVoltage(4);
+      FEEDER_MOTOR.setVoltage(-4);
     }
   }
 
@@ -64,7 +67,7 @@ public class Feeder extends SubsystemBase {
     if(COLOR_SENSOR.getProximity() <=5) {
       FEEDER_MOTOR.stopMotor();;
     }else{
-      FEEDER_MOTOR.setVoltage(4);
+      FEEDER_MOTOR.setVoltage(-4);
     }
   }
 }

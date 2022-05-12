@@ -13,7 +13,6 @@ public class AutoFeedBallsToShooter extends CommandBase {
     this.feeder = feeder;
 
     addRequirements(feeder);
-    addRequirements(limelight);
   }
 
   @Override
@@ -21,8 +20,8 @@ public class AutoFeedBallsToShooter extends CommandBase {
 
   @Override
   public void execute() {
-    if(/*RevShooter.isShooterAtSpeed == true && */limelight.isTurretAligned() ) {
-      feeder.feederSpeed(12);
+    if(RevShooterNew.FlywheelAtSpeed == true && limelight.isTurretAligned()) {
+      feeder.feederSpeed(-8);
     }else{
       feeder.feederStop();
     }

@@ -26,7 +26,7 @@ public final class Constants {
     public static final int LEFT_FOLLOW_ID = 25;
     public static final int RIGHT_LEADER_ID = 22;
     public static final int RIGHT_FOLLOW_ID = 24;
-    public static final double MAX_SPEED_DRIVE = 0.3;
+    public static final double MAX_SPEED_DRIVE = 1;
     public static final double DEADBAND_DRIVE = 0.02;
     public static final String NEUTRAL_MODE_DRIVE = "Brake";
 

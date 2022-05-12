@@ -7,10 +7,11 @@ package frc.robot.commands.ClimberCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class RetractClimberToHighAndTransversalBar extends CommandBase {
+public class ExtendClimberToMidBar extends CommandBase {
+  public double Setpoint = 67.6;
   public final Climber climber;
-  /** Creates a new RetractClimberToHighAndTransversalBar. */
-  public RetractClimberToHighAndTransversalBar(Climber climber) {
+  /** Creates a new ExtendClimber. */
+  public ExtendClimberToMidBar(Climber climber) {
     this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
@@ -18,27 +19,31 @@ public class RetractClimberToHighAndTransversalBar extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("ExtendClimber Initialize");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftError = 15 - climber.leftClimberEncoder();
-    double rightError = -15 - climber.rightClimberEncoder();
-    double leftSpeed = leftError * 0.01;
-    if(leftSpeed < -0.5) {
-      leftSpeed = -0.5;
+    System.out.println("ExtendClimber Execute");
+    double leftError = Setpoint - climber.leftClimberEncoder();
+    double rightError = -Setpoint - climber.rightClimberEncoder();
+    double leftSpeed = leftError * 0.6;
+    if(leftSpeed < 1){
+      leftSpeed = 1;
     }
-    double rightSpeed = rightError * 0.01;
-    if(rightSpeed > 0.5) {
-      rightSpeed = 0.5;
+    double rightSpeed = rightError * 0.6;
+    if(rightSpeed > -1){
+      rightSpeed = -1;
     }
-    if(climber.leftClimberEncoder() > 15) {
+    
+    if(climber.leftClimberEncoder() < Setpoint) {
       climber.leftClimberSpeed(leftSpeed);
     }else{
       climber.leftClimberStop();
     }
-    if(climber.rightClimberEncoder() < -15) {
+    if(climber.rightClimberEncoder() > -Setpoint) {
       climber.rightClimberSpeed(rightSpeed);
     }else{
       climber.rightClimberStop();
@@ -48,6 +53,7 @@ public class RetractClimberToHighAndTransversalBar extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("ExtendClimber End");
     climber.leftClimberStop();
     climber.rightClimberStop();
   }
@@ -55,7 +61,7 @@ public class RetractClimberToHighAndTransversalBar extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(climber.leftClimberEncoder() > 15 && climber.rightClimberEncoder() < -15) {
+    if(climber.leftClimberEncoder() < Setpoint && climber.rightClimberEncoder() > -Setpoint) {
       return false;
     }else{
       return true;

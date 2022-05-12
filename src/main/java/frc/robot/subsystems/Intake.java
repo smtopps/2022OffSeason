@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +12,6 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   WPI_TalonSRX INTAKE_MOTOR;
   Solenoid INTAKE_CYLINDER;
-  public static final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
 
   public Intake() {
     INTAKE_MOTOR = new WPI_TalonSRX(Constants.INTAKE_ID);
@@ -36,13 +34,5 @@ public class Intake extends SubsystemBase {
 
   public void intakeTogglePosition() {
     INTAKE_CYLINDER.toggle();
-  }
-
-  public void compressorDisable() {
-    compressor.disable();
-  }
-
-  public void compressorEnable() {
-    compressor.enableDigital();
   }
 }

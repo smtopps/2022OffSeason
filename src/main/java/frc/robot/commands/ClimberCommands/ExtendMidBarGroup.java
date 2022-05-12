@@ -10,15 +10,16 @@ import frc.robot.subsystems.Climber;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BarToBarGoup extends SequentialCommandGroup {
-  /** Creates a new BarToBarGroup. */
-  public BarToBarGoup(Climber climber) {
+public class ExtendMidBarGroup extends SequentialCommandGroup {
+  /** Creates a new ExtendToFirstBarGroup. */
+  public ExtendMidBarGroup(Climber climber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new AngleClimberDown(climber),
-      new ExtendClimberToHighBar(climber),
-      new AngleClimberUp(climber)
+      new DissableCompressor(climber),
+      new RetractClimber(climber),
+      new ExtendClimberToMidBar(climber),
+      new EnableCompressor(climber)
     );
   }
 }

@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,8 +16,9 @@ public class Climber extends SubsystemBase {
   RelativeEncoder CLIMBER_LEFT_ENCODER;
   RelativeEncoder CLIMBER_RIGHT_ENCODER;
   Solenoid CLIMBER_SOLINOID;
+  public static final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
   public Climber() {
-    CLIMBER_SOLINOID = new Solenoid(13, PneumaticsModuleType.REVPH, 12);
+    CLIMBER_SOLINOID = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, 14);
     CLIMBER_LEFT_MOTOR = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR_ID, MotorType.kBrushless);
     CLIMBER_RIGHT_MOTOR = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
@@ -24,8 +26,8 @@ public class Climber extends SubsystemBase {
     CLIMBER_RIGHT_MOTOR.restoreFactoryDefaults();
     CLIMBER_LEFT_MOTOR.setIdleMode(IdleMode.kBrake);
     CLIMBER_RIGHT_MOTOR.setIdleMode(IdleMode.kBrake);
-    CLIMBER_LEFT_MOTOR.setSmartCurrentLimit(5);
-    CLIMBER_RIGHT_MOTOR.setSmartCurrentLimit(5);
+    //CLIMBER_LEFT_MOTOR.setSmartCurrentLimit(40);
+    //CLIMBER_RIGHT_MOTOR.setSmartCurrentLimit(40);
 
     CLIMBER_LEFT_ENCODER = CLIMBER_LEFT_MOTOR.getEncoder();
     CLIMBER_RIGHT_ENCODER = CLIMBER_RIGHT_MOTOR.getEncoder();
@@ -58,6 +60,14 @@ public class Climber extends SubsystemBase {
     return CLIMBER_RIGHT_MOTOR.getOutputCurrent();
   }
 
+  public double leftClimberVelocity() {
+    return CLIMBER_LEFT_ENCODER.getVelocity();
+  }
+
+  public double rightClimberVelocity() {
+    return CLIMBER_RIGHT_ENCODER.getVelocity();
+  }
+
   public void leftClimberStop() {
     CLIMBER_LEFT_MOTOR.stopMotor();
   }
@@ -74,8 +84,20 @@ public class Climber extends SubsystemBase {
     CLIMBER_SOLINOID.set(false);
   }
 
+  public void toggleClimber() {
+    CLIMBER_SOLINOID.toggle();
+  }
+
   public void resetEncoders() {
     CLIMBER_LEFT_ENCODER.setPosition(0);
     CLIMBER_RIGHT_ENCODER.setPosition(0);
+  }
+  
+  public void compressorDisable() {
+    compressor.disable();
+  }
+
+  public void compressorEnable() {
+    compressor.enableDigital();
   }
 }

@@ -13,25 +13,32 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.AlignTurret;
 import frc.robot.commands.AutoFeedBallsToShooter;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IdleShooter;
 import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.RevShooter;
+import frc.robot.commands.RevShooterNew;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ToggleIntake;
+import frc.robot.commands.ClimberCommands.AngleClimberDown;
+import frc.robot.commands.ClimberCommands.AngleClimberUp;
 import frc.robot.commands.ClimberCommands.BarToBarGoup;
-import frc.robot.commands.ClimberCommands.ExtendClimber;
+import frc.robot.commands.ClimberCommands.ClimbToTopGroup;
+import frc.robot.commands.ClimberCommands.ExtendClimberToHighBar;
+import frc.robot.commands.ClimberCommands.ExtendClimberToMidBar;
+import frc.robot.commands.ClimberCommands.ExtendMidBarGroup;
 import frc.robot.commands.ClimberCommands.RetractClimber;
+import frc.robot.commands.ClimberCommands.ToggleClimber;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.DriveBaseTrajectory;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterNew;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -46,7 +53,7 @@ public class RobotContainer {
   public static final DriveBaseTrajectory driveBaseTrajectory = new DriveBaseTrajectory();
   private static final DriveBase driveBase = new DriveBase();
   private static final Intake intake = new Intake();
-  private static final Shooter shooter = new Shooter();
+  private static final ShooterNew shooterNew = new ShooterNew();
   private static final Limelight limelight = new Limelight();
   private static final Turret turret = new Turret();
   private static final Feeder feeder = new Feeder();
@@ -65,16 +72,20 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, driveBase));
     new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake));
-    new JoystickButton(driverController, 5).whenHeld(new RevShooter(shooter, driveBase, limelight));
+    //new JoystickButton(driverController, 5).whenHeld(new RevShooterNew(shooterNew, limelight));
     //new JoystickButton(driverController, 5).whenHeld(new AlignTurret(turret, limelight));
     //new JoystickButton(driverController, 2).whileHeld(new AutoFeedBallsToShooter(limelight, feeder));
     //new JoystickButton(driverController, 5).whenInactive(new PrepareBallsInFeeder(feeder));
-    //new JoystickButton(driverController, 5).whenInactive(new IdleShooter(shooter));
-    //new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder, driveBase));
+    //new JoystickButton(driverController, 5).whenInactive(new IdleShooter(shooterNew));
+    new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooterNew, turret, limelight, feeder));
 
-    //new JoystickButton(driverController, driverController.getPOV(0)).whenPressed(new ExtendClimber(climber));
-    //new JoystickButton(driverController, driverController.getPOV(180)).whenPressed(new RetractClimber(climber));
-    //new JoystickButton(driverController, driverController.getPOV(270)).whenPressed(new BarToBarGoup(climber));
+    new JoystickButton(driverController, 7).whenPressed(new ToggleClimber(climber));
+    //new POVButton(driverController, 270).whenPressed(new BarToBarGoup(climber));
+    new POVButton(driverController, 0).whenPressed(new ExtendMidBarGroup(climber));
+    new POVButton(driverController, 180).whenPressed(new ClimbToTopGroup(climber));
+    new POVButton(driverController, 270).whenPressed(new RetractClimber(climber));
+    new POVButton(driverController, 90).whenPressed(new ExtendClimberToMidBar(climber));
+    new JoystickButton(driverController, 8).whenPressed(new ExtendClimberToHighBar(climber));
   }
 
   /**

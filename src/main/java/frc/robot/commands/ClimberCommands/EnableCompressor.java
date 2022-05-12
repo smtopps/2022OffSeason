@@ -4,24 +4,21 @@
 
 package frc.robot.commands.ClimberCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class RetractClimber extends CommandBase {
-  public final Climber climber;
-  /** Creates a new RetractClimber. */
-  public RetractClimber(Climber climber) {
+public class EnableCompressor extends CommandBase {
+  Climber climber;
+  /** Creates a new EnableCompressor. */
+  public EnableCompressor(Climber climber) {
     this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climber.leftClimberSpeed(-10);
-    climber.rightClimberSpeed(10);
+    climber.compressorEnable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,20 +27,11 @@ public class RetractClimber extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    climber.resetEncoders();
-    climber.leftClimberStop();
-    climber.rightClimberStop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    Timer.delay(0.05);
-    if (climber.leftClimberVelocity() < 1 && climber.rightClimberVelocity() < 1) {
-      return true;
-    }else{
-      return false;
-    }
+    return true;
   }
 }

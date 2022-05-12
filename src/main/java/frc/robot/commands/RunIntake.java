@@ -17,8 +17,7 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void initialize() {
-    driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE_INTAKE);
-    intake.compressorDisable();
+    //driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE_INTAKE);
     intake.intakeSetPosition(true);
   }
 
@@ -29,9 +28,8 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
+    //driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
     intake.intakeSpeed(0.0);
-    intake.compressorEnable();
   }
 
   @Override

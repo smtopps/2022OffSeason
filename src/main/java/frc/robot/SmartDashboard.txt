@@ -1,0 +1,11 @@
+ShooterNew{
+    "flywheleRPM", SHOOTER_ENCODER_RIGHT.getVelocity()
+    "RPM Offset", RPMOffset
+}
+
+RevShooterNew{
+    "RevShooterNew", true
+    "ShooterDistance", distance
+    "Set RPM", RPM
+    "RevShooterNew", false
+}

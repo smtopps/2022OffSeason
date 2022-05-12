@@ -6,6 +6,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
 public class AlignTurret extends CommandBase {
+  public static boolean TurretAligned = false;
   public final Turret turret;
   public final Limelight limelight;
 
@@ -29,11 +30,14 @@ public class AlignTurret extends CommandBase {
     if(limelight.getTV() == 1) {
       if(limelight.getTX() <= 2 && limelight.getTX() >= -2) {
         turret.stopTurret();;
+        TurretAligned = false;
       }else{
         turret.turretSpeed(speed);
+        TurretAligned = true;
       }
     }else{
       turret.stopTurret();
+      TurretAligned = false;
     }
   }
 

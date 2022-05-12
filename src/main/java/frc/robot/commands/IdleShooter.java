@@ -1,19 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterNew;
 
 public class IdleShooter extends CommandBase {
-  public final Shooter shooter;
+  public final ShooterNew shooterNew;
 
-  public IdleShooter(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public IdleShooter(ShooterNew shooterNew) {
+    this.shooterNew = shooterNew;
+    addRequirements(shooterNew);
   }
 
   @Override
   public void initialize() {
-    shooter.flywheelSpeed(1250);
+    shooterNew.flywheelSpeed(1250);
   }
 
   @Override
@@ -21,7 +21,7 @@ public class IdleShooter extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    shooter.flywheelStop();
+    shooterNew.flywheelStop();
   }
 
   @Override
