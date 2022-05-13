@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
@@ -30,15 +31,16 @@ public class AlignTurret extends CommandBase {
     if(limelight.getTV() == 1) {
       if(limelight.getTX() <= 2 && limelight.getTX() >= -2) {
         turret.stopTurret();;
-        TurretAligned = false;
+        TurretAligned = true;
       }else{
         turret.turretSpeed(speed);
-        TurretAligned = true;
+        TurretAligned = false;
       }
     }else{
       turret.stopTurret();
       TurretAligned = false;
     }
+    SmartDashboard.putBoolean("Turret Aligned", TurretAligned);
   }
 
   @Override
@@ -46,6 +48,7 @@ public class AlignTurret extends CommandBase {
     //turret.centerTurretEncoder();
     //turret.centerTurretLimitSwitch();
     turret.stopTurret();
+    SmartDashboard.putBoolean("Turret Aligned", false);
   }
 
   @Override

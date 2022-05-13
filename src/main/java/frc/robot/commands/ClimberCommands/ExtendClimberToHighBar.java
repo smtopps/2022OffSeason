@@ -20,13 +20,11 @@ public class ExtendClimberToHighBar extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("ExtendClimber Initialize");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("ExtendClimber Execute");
     double leftError = Setpoint - climber.leftClimberEncoder();
     double rightError = -Setpoint - climber.rightClimberEncoder();
     double leftSpeed = leftError * 0.6;
@@ -53,7 +51,6 @@ public class ExtendClimberToHighBar extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("ExtendClimber End");
     climber.leftClimberStop();
     climber.rightClimberStop();
   }

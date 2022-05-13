@@ -32,10 +32,10 @@ public class ShooterNew extends SubsystemBase {
     RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(0.5);
 
     SHOOTER_PID_RIGHT.setFeedbackDevice(SHOOTER_ENCODER_RIGHT);
-    SHOOTER_PID_RIGHT.setFF(0.0002); //was 0.0002
-    SHOOTER_PID_RIGHT.setP(0.0001); //was 0.00015
+    SHOOTER_PID_RIGHT.setFF(0.00019); //was 0.0002
+    SHOOTER_PID_RIGHT.setP(0.00001); //was 0.00015
     SHOOTER_PID_RIGHT.setI(0);
-    SHOOTER_PID_RIGHT.setD(0.0001); //was 0.0002
+    SHOOTER_PID_RIGHT.setD(0.000); //was 0.0002
 
     LEFT_SHOOTER_MOTOR.setInverted(true);
     LEFT_SHOOTER_MOTOR.follow(RIGHT_SHOOTER_MOTOR, true);

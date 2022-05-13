@@ -12,6 +12,7 @@ import frc.robot.subsystems.Climber;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ClimbToTopGroup extends SequentialCommandGroup {
+  public static double ClimberBar = 1;
   /** Creates a new ClimbToTop. */
   public ClimbToTopGroup(Climber climber) {
     // Add your commands in the addCommands() call, e.g.

@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.Arrays;
-
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,18 +12,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.AlignTurret;
-import frc.robot.commands.AutoFeedBallsToShooter;
 import frc.robot.commands.DriveWithJoystick;
-import frc.robot.commands.IdleShooter;
-import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.RevShooterNew;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ToggleIntake;
-import frc.robot.commands.ClimberCommands.AngleClimberDown;
-import frc.robot.commands.ClimberCommands.AngleClimberUp;
-import frc.robot.commands.ClimberCommands.BarToBarGoup;
+import frc.robot.commands.AutoCommands.DriveByDistance;
+import frc.robot.commands.AutoCommands.DriveByDistanceBasic;
+import frc.robot.commands.AutoCommands.TurnByAngleBasic;
 import frc.robot.commands.ClimberCommands.ClimbToTopGroup;
 import frc.robot.commands.ClimberCommands.ExtendClimberToHighBar;
 import frc.robot.commands.ClimberCommands.ExtendClimberToMidBar;
@@ -50,7 +43,7 @@ import frc.robot.subsystems.Turret;
 public class RobotContainer {
 
   public static final XboxController driverController = new XboxController(Constants.DRIVER_CONTROLLER);
-  public static final DriveBaseTrajectory driveBaseTrajectory = new DriveBaseTrajectory();
+  //public static final DriveBaseTrajectory driveBaseTrajectory = new DriveBaseTrajectory();
   private static final DriveBase driveBase = new DriveBase();
   private static final Intake intake = new Intake();
   private static final ShooterNew shooterNew = new ShooterNew();
@@ -72,9 +65,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, driveBase));
     new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake));
-    //new JoystickButton(driverController, 5).whenHeld(new RevShooterNew(shooterNew, limelight));
-    //new JoystickButton(driverController, 5).whenHeld(new AlignTurret(turret, limelight));
-    //new JoystickButton(driverController, 2).whileHeld(new AutoFeedBallsToShooter(limelight, feeder));
     //new JoystickButton(driverController, 5).whenInactive(new PrepareBallsInFeeder(feeder));
     //new JoystickButton(driverController, 5).whenInactive(new IdleShooter(shooterNew));
     new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooterNew, turret, limelight, feeder));
@@ -95,7 +85,7 @@ public class RobotContainer {
    */
   public static Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new DriveByDistanceBasic(driveBase, 20);
     /*TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
     config.setKinematics(driveBaseTrajectory.getKinematics());
 

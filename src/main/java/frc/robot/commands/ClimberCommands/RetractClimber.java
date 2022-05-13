@@ -5,6 +5,7 @@
 package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -34,6 +35,8 @@ public class RetractClimber extends CommandBase {
     climber.resetEncoders();
     climber.leftClimberStop();
     climber.rightClimberStop();
+    ClimbToTopGroup.ClimberBar ++;
+    SmartDashboard.putNumber("Climber Bar", ClimbToTopGroup.ClimberBar);
   }
 
   // Returns true when the command should end.

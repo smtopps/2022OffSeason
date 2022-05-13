@@ -16,10 +16,8 @@ public class ExtendMidBarGroup extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DissableCompressor(climber),
       new RetractClimber(climber),
-      new ExtendClimberToMidBar(climber),
-      new EnableCompressor(climber)
+      new ExtendClimberToMidBar(climber)
     );
   }
 }

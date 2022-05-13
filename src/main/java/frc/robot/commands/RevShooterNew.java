@@ -32,14 +32,12 @@ public class RevShooterNew extends CommandBase {
   @Override
   public void initialize() {
     limelight.setLEDMode(3);
-    SmartDashboard.putBoolean("RevShooterNew", true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     distance = limelight.getTY();
-    SmartDashboard.putNumber("ShooterDistance", distance);
 
     shooterNew.setFlywheelRPM(RPM);
 
@@ -53,7 +51,7 @@ public class RevShooterNew extends CommandBase {
     SmartDashboard.putNumber("Set RPM", RPM);
 
 
-    if(shooterNew.getFlywheelRPM() <= RPM+50 && shooterNew.getFlywheelRPM() >= RPM-50 && Counter < 5) {
+    /*if(shooterNew.getFlywheelRPM() <= RPM+50 && shooterNew.getFlywheelRPM() >= RPM-50 && Counter < 5) {
       //FlywheelAtSpeed = true;
       Counter++;
     }else if(Counter > 0){
@@ -64,7 +62,19 @@ public class RevShooterNew extends CommandBase {
       FlywheelAtSpeed = true;
     }else{
       FlywheelAtSpeed = false;
+    }*/
+
+    if((Math.abs(shooterNew.getFlywheelRPM() - RPM)) < 25) {
+      Counter++;
     }
+
+    if(Counter >= 3) {
+      FlywheelAtSpeed = true;
+    }else{
+      FlywheelAtSpeed = false;
+    }
+
+    SmartDashboard.putBoolean("FlywheelAtSpeed", FlywheelAtSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -74,7 +84,7 @@ public class RevShooterNew extends CommandBase {
     shooterNew.stopMotors();
     RPM = 1250;
     Counter = 0;
-    SmartDashboard.putBoolean("RevShooterNew", false);
+    SmartDashboard.putBoolean("FlywheelAtSpeed", false);
     limelight.setLEDMode(1);
   }
 
