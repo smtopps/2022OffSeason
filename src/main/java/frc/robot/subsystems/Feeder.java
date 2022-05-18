@@ -56,7 +56,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void getBallInFeederWithColor() {
-    if(COLOR_SENSOR.getProximity() <= 5 && colorString == "Blue")  {
+    if(COLOR_SENSOR.getProximity() <= 1600 && colorString == "Blue")  {
       FEEDER_MOTOR.stopMotor();
     }else{
       FEEDER_MOTOR.setVoltage(-4);
@@ -64,7 +64,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void getBallInFeeder() {
-    if(COLOR_SENSOR.getProximity() <=5) {
+    if(COLOR_SENSOR.getProximity() <=1600) {
       FEEDER_MOTOR.stopMotor();;
     }else{
       FEEDER_MOTOR.setVoltage(-4);

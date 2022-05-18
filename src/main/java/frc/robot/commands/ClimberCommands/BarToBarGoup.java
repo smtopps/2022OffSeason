@@ -17,7 +17,7 @@ public class BarToBarGoup extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new AngleClimberDown(climber),
-      new ExtendClimberToHighBar(climber),
+      new ExtendClimber(climber, 73.3),
       new AngleClimberUp(climber)
     );
   }

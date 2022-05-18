@@ -21,6 +21,7 @@ public class DriveWithJoystick extends CommandBase {
     driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
     driveBase.setdeadband(Constants.DEADBAND_DRIVE);
     driveBase.setneutralmode(Constants.NEUTRAL_MODE_DRIVE);
+    driveBase.setRampRate(Constants.RAMP_RATE_DRIVE);
   }
 
   @Override

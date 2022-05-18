@@ -8,30 +8,42 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.KilllEverything;
+import frc.robot.commands.PrepareBallsInFeeder;
+import frc.robot.commands.RobotInit;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.ShootBalls;
 import frc.robot.commands.ToggleIntake;
-import frc.robot.commands.AutoCommands.DriveByDistance;
 import frc.robot.commands.AutoCommands.DriveByDistanceBasic;
+import frc.robot.commands.AutoCommands.DriveTest;
+import frc.robot.commands.AutoCommands.FourBallOne;
 import frc.robot.commands.AutoCommands.TurnByAngleBasic;
+import frc.robot.commands.AutoCommands.TwoBall;
+import frc.robot.commands.ClimberCommands.BarToBarGoup;
 import frc.robot.commands.ClimberCommands.ClimbToTopGroup;
-import frc.robot.commands.ClimberCommands.ExtendClimberToHighBar;
-import frc.robot.commands.ClimberCommands.ExtendClimberToMidBar;
+import frc.robot.commands.ClimberCommands.ExtendClimber;
 import frc.robot.commands.ClimberCommands.ExtendMidBarGroup;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimber;
+import frc.robot.commands.ShooterCommands.AlignTurret;
+import frc.robot.commands.ShooterCommands.IdleShooter;
+import frc.robot.commands.ShooterCommands.ResetTurretEncoder;
+import frc.robot.commands.ShooterCommands.ShootBalls;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.DriveBaseTrajectory;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.ShooterNew;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -46,11 +58,17 @@ public class RobotContainer {
   //public static final DriveBaseTrajectory driveBaseTrajectory = new DriveBaseTrajectory();
   private static final DriveBase driveBase = new DriveBase();
   private static final Intake intake = new Intake();
-  private static final ShooterNew shooterNew = new ShooterNew();
+  private static final Shooter shooter = new Shooter();
   private static final Limelight limelight = new Limelight();
   private static final Turret turret = new Turret();
   private static final Feeder feeder = new Feeder();
   private static final Climber climber = new Climber();
+  private final FourBallOne fourBallOne = new FourBallOne(driveBase, intake, shooter, limelight, turret, feeder, waitTime);
+  private final TwoBall twoBall = new TwoBall(driveBase, intake, shooter, turret, limelight, feeder, waitTime);
+  static double waitTime;
+
+
+  static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   // The robot's subsystems and commands are defined here...
 
@@ -60,22 +78,30 @@ public class RobotContainer {
     driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, driverController.getLeftY(), driverController.getLeftX()));
     // Configure the button bindings
     configureButtonBindings();
+
+    autoChooser.setDefaultOption("4 Ball 1", fourBallOne);
+    autoChooser.addOption("2 Ball", twoBall);
+    SmartDashboard.putData(autoChooser);
+    waitTime = SmartDashboard.getNumber("Auto Wait", 0);
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, driveBase));
+    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake));
     new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake));
-    //new JoystickButton(driverController, 5).whenInactive(new PrepareBallsInFeeder(feeder));
-    //new JoystickButton(driverController, 5).whenInactive(new IdleShooter(shooterNew));
-    new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooterNew, turret, limelight, feeder));
+    new JoystickButton(driverController, 8).whenPressed(new ResetTurretEncoder(turret));
+    //new JoystickButton(driverController, 5).whenReleased(new PrepareBallsInFeeder(feeder));
+    new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder));
+    //new JoystickButton(driverController, 5).whenReleased(new IdleShooter(shooter));
+    //new JoystickButton(driverController, 3).whenPressed(new KilllEverything(climber, driveBase, feeder, intake, limelight, shooter, turret));
 
-    new JoystickButton(driverController, 7).whenPressed(new ToggleClimber(climber));
-    //new POVButton(driverController, 270).whenPressed(new BarToBarGoup(climber));
     new POVButton(driverController, 0).whenPressed(new ExtendMidBarGroup(climber));
-    new POVButton(driverController, 180).whenPressed(new ClimbToTopGroup(climber));
-    new POVButton(driverController, 270).whenPressed(new RetractClimber(climber));
-    new POVButton(driverController, 90).whenPressed(new ExtendClimberToMidBar(climber));
-    new JoystickButton(driverController, 8).whenPressed(new ExtendClimberToHighBar(climber));
+    //new POVButton(driverController, 180).whenPressed(new ClimbToTopGroup(climber));
+    new POVButton(driverController, 270).whenPressed(new BarToBarGoup(climber));
+    new POVButton(driverController, 180).whenPressed(new RetractClimber(climber));
+  }
+
+  public static void robotInit() {
+    new RobotInit(limelight, climber, turret);
   }
 
   /**
@@ -85,7 +111,10 @@ public class RobotContainer {
    */
   public static Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new DriveByDistanceBasic(driveBase, 20);
+    return autoChooser.getSelected();
+    //return new DriveByDistanceBasic(driveBase, 20, 0.4, 0.4);
+    //return new TurnByAngleBasic(driveBase, 90, 0.4, 0.4);
+    //return new DriveTest(driveBase, 0.07, 0.5);
     /*TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
     config.setKinematics(driveBaseTrajectory.getKinematics());
 

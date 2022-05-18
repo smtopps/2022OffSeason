@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShooterNew extends SubsystemBase {
+public class Shooter extends SubsystemBase {
   /** Creates a new ShooterNew. */
   private final CANSparkMax LEFT_SHOOTER_MOTOR = new CANSparkMax(Constants.LEFT_SHOOTER_MOTOR_ID, MotorType.kBrushless);
   private final CANSparkMax RIGHT_SHOOTER_MOTOR = new CANSparkMax(Constants.RIGHT_SHOOTER_MOTOR_ID, MotorType.kBrushless);
@@ -21,15 +21,15 @@ public class ShooterNew extends SubsystemBase {
 
   double RPMOffset;
   
-  public ShooterNew() {
+  public Shooter() {
     System.out.println("Shooter constructor called");
     LEFT_SHOOTER_MOTOR.restoreFactoryDefaults();
     RIGHT_SHOOTER_MOTOR.restoreFactoryDefaults();
     LEFT_SHOOTER_MOTOR.setIdleMode(IdleMode.kCoast);
     RIGHT_SHOOTER_MOTOR.setIdleMode(IdleMode.kCoast);
 
-    RIGHT_SHOOTER_MOTOR.setOpenLoopRampRate(0.5);
-    RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(0.5);
+    //RIGHT_SHOOTER_MOTOR.setOpenLoopRampRate(0.5);
+    //RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(0.5);
 
     SHOOTER_PID_RIGHT.setFeedbackDevice(SHOOTER_ENCODER_RIGHT);
     SHOOTER_PID_RIGHT.setFF(0.00019); //was 0.0002
@@ -84,9 +84,8 @@ public class ShooterNew extends SubsystemBase {
     return true;
   }
 
-public void flywheelSpeed(int i) {
-}
-
-public void flywheelStop() {
-}
+  public void setRampRate(double rampRate) {
+    RIGHT_SHOOTER_MOTOR.setOpenLoopRampRate(rampRate);
+    RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(rampRate);
+  }
 }

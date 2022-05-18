@@ -3,22 +3,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
   public final Intake intake;
-  public final DriveBase driveBase;
 
-  public RunIntake(Intake intake, DriveBase driveBase) {
+  public RunIntake(Intake intake) {
     this.intake = intake;
-    this.driveBase = driveBase;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
-    //driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE_INTAKE);
     intake.intakeSetPosition(true);
     SmartDashboard.putBoolean("RunIntake", true);
   }
@@ -30,7 +26,6 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    //driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
     intake.intakeSpeed(0.0);
     SmartDashboard.putBoolean("RunIntake", false);
   }

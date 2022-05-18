@@ -20,11 +20,13 @@ public class ClimbToTopGroup extends SequentialCommandGroup {
     addCommands(
       new DissableCompressor(climber),
       new RetractClimber(climber),
-      new BarToBarGoup(climber),
       new WaitCommand(0.5),
+      new BarToBarGoup(climber),
+      new WaitCommand(1),
       new RetractClimber(climber),
-      new BarToBarGoup(climber),
       new WaitCommand(0.5),
+      new BarToBarGoup(climber),
+      new WaitCommand(1),
       new RetractClimber(climber),
       new EnableCompressor(climber)
     );

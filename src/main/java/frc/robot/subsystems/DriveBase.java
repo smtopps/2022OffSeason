@@ -14,8 +14,6 @@ public class DriveBase extends SubsystemBase {
   WPI_TalonFX LEFT_FOLLOW;
   WPI_TalonFX RIGHT_LEADER;
   WPI_TalonFX RIGHT_FOLLOW;
-  //MotorControllerGroup LEFT_MOTORS;
-  //MotorControllerGroup RIGHT_MOTORS;
   DifferentialDrive DRIVE;
   double throttle;
   double rotation;
@@ -32,16 +30,11 @@ public class DriveBase extends SubsystemBase {
     RIGHT_LEADER.setInverted(true);
     RIGHT_FOLLOW.setInverted(true);
 
-    //LEFT_MOTORS = new MotorControllerGroup(LEFT_LEADER, LEFT_FOLLOW);
-    //RIGHT_MOTORS = new MotorControllerGroup(RIGHT_LEADER, RIGHT_FOLLOW);
-
     DRIVE = new DifferentialDrive(LEFT_LEADER, RIGHT_LEADER);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Encoder Position", getLeftEncoderPosition());
-    SmartDashboard.putNumber("Right Encoder Position", getRightEncoderPosition());
     SmartDashboard.putNumber("Left Encoder Distance", getLeftEncoderDistance());
     SmartDashboard.putNumber("Right Encoder Distance", getRightEncoderDistance());
   }
@@ -53,12 +46,11 @@ public class DriveBase extends SubsystemBase {
   }
 
   public void autoArcadedrive(double throttle, double rotation) {
-    DRIVE.arcadeDrive(throttle, rotation);
+    DRIVE.arcadeDrive(throttle, rotation, false);
   }
 
-  public void autoManualDrive(double leftVoltage, double rightVoltage) {
-    LEFT_LEADER.setVoltage(leftVoltage);
-    RIGHT_LEADER.setVoltage(rightVoltage);
+  public void autoArcadeStop() {
+    DRIVE.stopMotor();
   }
 
   public void setmaxoutput(double maxOutput) {
@@ -85,24 +77,23 @@ public class DriveBase extends SubsystemBase {
     }
   }
 
-  public double getLeftEncoderPosition() {
-    return LEFT_LEADER.getSelectedSensorPosition();
-  }
-
-  public double getRightEncoderPosition() {
-    return (RIGHT_LEADER.getSelectedSensorPosition() / 2048 / 10.7142857142857);
-  }
-
   public double getLeftEncoderDistance() {
-    return (LEFT_LEADER.getSelectedSensorPosition() / 2048 / 10.7142857142857 * (Math.PI*6));
+    return (LEFT_LEADER.getSelectedSensorPosition() / 2048 / 10.7142857142857 * (Math.PI*5.6));
   }
 
   public double getRightEncoderDistance() {
-    return (RIGHT_LEADER.getSelectedSensorPosition() / 2040 / 10.7142857142857 * (Math.PI*6));
+    return (RIGHT_LEADER.getSelectedSensorPosition() / 2040 / 10.7142857142857 * (Math.PI*5.6));
   }
 
   public void resetEncoderPosition() {
     LEFT_LEADER.setSelectedSensorPosition(0);
     RIGHT_LEADER.setSelectedSensorPosition(0);
+  }
+
+  public void setRampRate(double rampRate) {
+    LEFT_LEADER.configOpenloopRamp(rampRate);
+    RIGHT_LEADER.configOpenloopRamp(rampRate);
+    LEFT_LEADER.configClosedloopRamp(rampRate);
+    RIGHT_LEADER.configClosedloopRamp(rampRate);
   }
 }

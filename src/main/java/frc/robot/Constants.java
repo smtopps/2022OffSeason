@@ -29,6 +29,7 @@ public final class Constants {
     public static final double MAX_SPEED_DRIVE = 1;
     public static final double DEADBAND_DRIVE = 0.02;
     public static final String NEUTRAL_MODE_DRIVE = "Brake";
+    public static final double RAMP_RATE_DRIVE = 0.1;
 
     //Intake Motor ID and information
     public static final int INTAKE_ID = 28;

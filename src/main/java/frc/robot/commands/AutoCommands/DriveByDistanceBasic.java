@@ -11,10 +11,14 @@ import frc.robot.subsystems.DriveBase;
 public class DriveByDistanceBasic extends CommandBase {
   DriveBase driveBase;
   double distance;
+  double maxSpeed;
+  double rampRate;
   /** Creates a new DriveByDistanceBasic. */
-  public DriveByDistanceBasic(DriveBase driveBase, double distance) {
+  public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed, double rampRate) {
     this.driveBase = driveBase;
     this.distance = distance;
+    this.maxSpeed = maxSpeed;
+    this.rampRate = rampRate;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveBase);
   }
@@ -23,6 +27,9 @@ public class DriveByDistanceBasic extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("DriveByDistance", true);
+    driveBase.setneutralmode("Brake");
+    driveBase.setdeadband(0.0);
+    driveBase.setRampRate(rampRate);
     driveBase.resetEncoderPosition();
   }
 
@@ -30,16 +37,16 @@ public class DriveByDistanceBasic extends CommandBase {
   @Override
   public void execute() {
     double leftError = distance - driveBase.getLeftEncoderDistance();
-    double speed = leftError * 0.05;
+    double speed = leftError * 0.02;
 
-    if(speed > 0.4) {
-      speed = 0.4;
-    }else if(speed < -0.4) {
-      speed = -0.4;
-    }else if(speed < 0.1 && speed > 0){
-      speed = 0.1;
-    }else if(speed > -0.1 && speed < 0){
-      speed = -0.1;
+    if(speed > maxSpeed) {
+      speed = maxSpeed;
+    }else if(speed < -maxSpeed) {
+      speed = -maxSpeed;
+    }else if(speed < 0.06 && speed > 0){
+      speed = 0.06;
+    }else if(speed > -0.06 && speed < 0){
+      speed = -0.06;
     }
 
     SmartDashboard.putNumber("speed", speed);

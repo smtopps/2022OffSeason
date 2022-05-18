@@ -7,20 +7,22 @@ package frc.robot.commands.ClimberCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class ExtendClimberToHighBar extends CommandBase {
-  public double Setpoint = 73;
+public class ExtendClimber extends CommandBase {
+  public double Setpoint;
+  //public double Setpoint = 67.6; mid bar setpoint
+  //public double Setpoint = 73; high bar setpoint
   public final Climber climber;
   /** Creates a new ExtendClimber. */
-  public ExtendClimberToHighBar(Climber climber) {
+  public ExtendClimber(Climber climber, double Setpoint) {
     this.climber = climber;
+    this.Setpoint = Setpoint;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
