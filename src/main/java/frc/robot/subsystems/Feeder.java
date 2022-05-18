@@ -11,7 +11,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -45,7 +47,13 @@ public class Feeder extends SubsystemBase {
     }
     }
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Feeder Proximity", COLOR_SENSOR.getProximity());
+    SmartDashboard.putNumber("Feeder Red", COLOR_SENSOR.getRed());
+    SmartDashboard.putNumber("Feeder Blue", COLOR_SENSOR.getBlue());
+    SmartDashboard.putNumber("Feeder Green", COLOR_SENSOR.getGreen());
+    SmartDashboard.putString("Color", colorString);
+    }
 
   public void feederSpeed(double voltage) {
     FEEDER_MOTOR.setVoltage(voltage);
@@ -56,18 +64,49 @@ public class Feeder extends SubsystemBase {
   }
 
   public void getBallInFeederWithColor() {
-    if(COLOR_SENSOR.getProximity() <= 1600 && colorString == "Blue")  {
+    if(COLOR_SENSOR.getProximity() >= 70 && COLOR_SENSOR.getRed() > COLOR_SENSOR.getGreen() && COLOR_SENSOR.getRed() > COLOR_SENSOR.getBlue())  {
       FEEDER_MOTOR.stopMotor();
     }else{
-      FEEDER_MOTOR.setVoltage(-4);
+      FEEDER_MOTOR.setVoltage(-3.5);
     }
   }
 
   public void getBallInFeeder() {
-    if(COLOR_SENSOR.getProximity() <=1600) {
-      FEEDER_MOTOR.stopMotor();;
+    if(COLOR_SENSOR.getProximity() >=70) {
+      FEEDER_MOTOR.stopMotor();
     }else{
+      FEEDER_MOTOR.setVoltage(-3.5);
+    }
+  }
+
+  public void colorRejector() {
+    if (COLOR_SENSOR.getRed() < COLOR_SENSOR.getGreen() && COLOR_SENSOR.getRed() < COLOR_SENSOR.getBlue()) {
       FEEDER_MOTOR.setVoltage(-4);
+    }else{
+      FEEDER_MOTOR.stopMotor();
+    }
+  }
+
+  public boolean isBallRightColor(int color1IsBlue2IsRed) {
+    if(color1IsBlue2IsRed == 1) {
+      if(COLOR_SENSOR.getGreen() > COLOR_SENSOR.getBlue() && COLOR_SENSOR.getGreen() > COLOR_SENSOR.getRed()) {
+        return true;
+      }else{
+        return false;
+      }
+    }else if{color1IsBlue2IsRed}
+    if(COLOR_SENSOR.getRed() > COLOR_SENSOR.getGreen() && COLOR_SENSOR.getRed() > COLOR_SENSOR.getBlue()) {
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public boolean isBallInFeeder() {
+    if (COLOR_SENSOR.getProximity() >=70) {
+      return true;
+    }else{
+      return false;
     }
   }
 }
