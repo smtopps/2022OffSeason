@@ -17,16 +17,12 @@ public class RevShooter extends CommandBase {
 
   double distance = 0;
 
-  /** Creates a new RevShooterNew. */
   public RevShooter(Shooter shooter, Limelight limelight) {
     this.shooter = shooter;
     this.limelight = limelight;
-
     addRequirements(shooter, limelight);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     limelight.setLEDMode(3);
@@ -35,12 +31,11 @@ public class RevShooter extends CommandBase {
     shooter.setRampRate(0.5);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     distance = limelight.getTY();
 
-    shooter.setFlywheelRPM(RPM-25); //-40
+    shooter.setFlywheelRPM(RPM); //-40
 
     if(limelight.getTV() == 0){
       RPM = -1600;
@@ -51,7 +46,7 @@ public class RevShooter extends CommandBase {
 
     SmartDashboard.putNumber("Set RPM", RPM);
 
-    if((Math.abs(shooter.getFlywheelRPM() - RPM)) < 25) {
+    if((Math.abs(shooter.getFlywheelRPM() - RPM)) < 50) {
       Counter++;
     }/*else{
       Counter = 0;
@@ -63,7 +58,13 @@ public class RevShooter extends CommandBase {
       FlywheelAtSpeed = false;
     }
 
-    if(limelight.getTV() == 0 || limelight.getTY() <= 8 || limelight.getTY() >= -12){
+    if(limelight.getTV() == 0){
+      RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
+      RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
+    }else if(limelight.getTY() > 8){
+      RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
+      RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
+    }else if(limelight.getTY() < -12){
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
     }else{
@@ -74,7 +75,6 @@ public class RevShooter extends CommandBase {
     SmartDashboard.putBoolean("FlywheelAtSpeed", FlywheelAtSpeed);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     FlywheelAtSpeed = false;
@@ -89,7 +89,6 @@ public class RevShooter extends CommandBase {
     limelight.setStream(2);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

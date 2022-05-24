@@ -1,6 +1,7 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter;
 
 public class IdleShooter extends CommandBase {
@@ -13,8 +14,12 @@ public class IdleShooter extends CommandBase {
 
   @Override
   public void initialize() {
-    shooter.setRampRate(0.5);
-    shooter.setFlywheelRPM(1250);
+    if(RobotContainer.stopShooterSystem == false){
+      shooter.setRampRate(0.5);
+      shooter.setFlywheelRPM(-1250);
+    }else{
+      shooter.stopMotors();
+    }
   }
 
   @Override

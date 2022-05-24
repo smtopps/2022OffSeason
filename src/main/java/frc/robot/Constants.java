@@ -14,6 +14,7 @@ public final class Constants {
     
     //Controller Numbers
     public static final int DRIVER_CONTROLLER = 0;
+    public static final int OPERATOR_CONTROLLER = 1;
 
     //Pneumatics Module ID and Information
     public static final int REV_PNEUMATIC_MODULE_ID = 14;

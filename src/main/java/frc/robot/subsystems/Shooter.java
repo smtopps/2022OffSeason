@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-  /** Creates a new ShooterNew. */
   private final CANSparkMax LEFT_SHOOTER_MOTOR = new CANSparkMax(Constants.LEFT_SHOOTER_MOTOR_ID, MotorType.kBrushless);
   private final CANSparkMax RIGHT_SHOOTER_MOTOR = new CANSparkMax(Constants.RIGHT_SHOOTER_MOTOR_ID, MotorType.kBrushless);
 
@@ -22,7 +21,6 @@ public class Shooter extends SubsystemBase {
   double RPMOffset;
   
   public Shooter() {
-    System.out.println("Shooter constructor called");
     LEFT_SHOOTER_MOTOR.restoreFactoryDefaults();
     RIGHT_SHOOTER_MOTOR.restoreFactoryDefaults();
     LEFT_SHOOTER_MOTOR.setIdleMode(IdleMode.kCoast);
@@ -32,10 +30,10 @@ public class Shooter extends SubsystemBase {
     //RIGHT_SHOOTER_MOTOR.setClosedLoopRampRate(0.5);
 
     SHOOTER_PID_RIGHT.setFeedbackDevice(SHOOTER_ENCODER_RIGHT);
-    SHOOTER_PID_RIGHT.setFF(0.00019); //was 0.0002
-    SHOOTER_PID_RIGHT.setP(0.00001); //was 0.00015
+    SHOOTER_PID_RIGHT.setFF(0.000195); //was 0.00019
+    SHOOTER_PID_RIGHT.setP(0.000015); //was 0.00001
     SHOOTER_PID_RIGHT.setI(0);
-    SHOOTER_PID_RIGHT.setD(0.000); //was 0.0002
+    SHOOTER_PID_RIGHT.setD(0.000);
 
     LEFT_SHOOTER_MOTOR.setInverted(true);
     LEFT_SHOOTER_MOTOR.follow(RIGHT_SHOOTER_MOTOR, true);
@@ -43,7 +41,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     SmartDashboard.putNumber("flywheleRPM", SHOOTER_ENCODER_RIGHT.getVelocity());
     SmartDashboard.putNumber("RPM Offset", RPMOffset);
   }

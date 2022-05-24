@@ -26,7 +26,7 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    intake.intakeSpeed(0.0);
+    intake.intakeStop();
     SmartDashboard.putBoolean("RunIntake", false);
   }
 

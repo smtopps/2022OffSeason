@@ -35,4 +35,8 @@ public class Intake extends SubsystemBase {
   public void intakeTogglePosition() {
     INTAKE_CYLINDER.toggle();
   }
+
+  public void intakeStop() {
+    INTAKE_MOTOR.stopMotor();
+  }
 }

@@ -1,21 +1,17 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ToggleIntake;
+import frc.robot.commands.ShooterCommands.DissableFeederAndShooter;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ExtendMidBarGroup extends SequentialCommandGroup {
-  /** Creates a new ExtendToFirstBarGroup. */
-  public ExtendMidBarGroup(Climber climber) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+  public ExtendMidBarGroup(Climber climber, Intake intake) {
     addCommands(
+      new DissableFeederAndShooter(),
+      new ToggleIntake(intake, 1),
+      new DissableCompressor(climber),
       new RetractClimber(climber),
       new ExtendClimber(climber, 67.6)
     );

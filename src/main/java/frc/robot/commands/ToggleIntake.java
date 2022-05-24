@@ -5,15 +5,23 @@ import frc.robot.subsystems.Intake;
 
 public class ToggleIntake extends CommandBase {
   public final Intake intake;
+  public int OneRaiseTwoLowThreeToggle;
 
-  public ToggleIntake(Intake intake) {
+  public ToggleIntake(Intake intake, int OneRaiseTwoLowThreeToggle) {
     this.intake = intake;
+    this.OneRaiseTwoLowThreeToggle = OneRaiseTwoLowThreeToggle;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
-    intake.intakeTogglePosition();
+    if(OneRaiseTwoLowThreeToggle == 3) {
+      intake.intakeTogglePosition();
+    }else if(OneRaiseTwoLowThreeToggle == 2) {
+      intake.intakeSetPosition(true);
+    }else if(OneRaiseTwoLowThreeToggle == 1) {
+      intake.intakeSetPosition(false);
+    }
   }
 
   @Override

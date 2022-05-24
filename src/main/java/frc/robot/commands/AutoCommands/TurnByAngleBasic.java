@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.AutoCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,17 +10,15 @@ public class TurnByAngleBasic extends CommandBase {
   double distance;
   double maxSpeed;
   double rampRate;
-  /** Creates a new DriveByDistanceBasic. */
+
   public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed, double rampRate) {
     this.driveBase = driveBase;
     this.angle = angle;
     this.maxSpeed = maxSpeed;
     this.rampRate = rampRate;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveBase);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("TurnByAngle", true);
@@ -34,7 +28,6 @@ public class TurnByAngleBasic extends CommandBase {
     driveBase.resetEncoderPosition();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     distance = ((Math.PI*22) / 360) *angle;
@@ -56,14 +49,13 @@ public class TurnByAngleBasic extends CommandBase {
     driveBase.autoArcadedrive(0, speed);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("TurnByAngle", false);
     driveBase.autoArcadedrive(0, 0);
+    driveBase.resetEncoderPosition();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(Math.abs(driveBase.getLeftEncoderDistance()) < Math.abs(distance)) {
