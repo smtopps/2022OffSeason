@@ -11,7 +11,6 @@ public class AlignTurret extends CommandBase {
   public static boolean TurretAligned = false;
   public final Turret turret;
   public final Limelight limelight;
-  public static double turretOffset;
 
   public AlignTurret(Turret turret, Limelight limelight) {
     this.turret = turret;
@@ -24,11 +23,11 @@ public class AlignTurret extends CommandBase {
 
   @Override
   public void execute() {
-    double speed = ((limelight.getTX()+turretOffset) * Constants.TURRET_P);
+    double speed = ((limelight.getTX() + FeedBallsToShooter.turretOffset) * Constants.TURRET_P);
 
     if(RobotContainer.toggleAlignTurret == true) {
       if(limelight.getTV() == 1) {
-        if(limelight.getTX() <= 2 && limelight.getTX() >= -2) {
+        if(limelight.getTX()+FeedBallsToShooter.turretOffset <= 2 && limelight.getTX()+FeedBallsToShooter.turretOffset >= -2) {
           turret.stopTurret();;
           TurretAligned = true;
         }else{

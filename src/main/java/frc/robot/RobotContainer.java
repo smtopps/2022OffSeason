@@ -11,7 +11,6 @@ import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.RobotInit;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ToggleIntake;
-import frc.robot.commands.toggleSettings;
 import frc.robot.commands.AutoCommands.DemoAuto;
 import frc.robot.commands.AutoCommands.FourBallOne;
 import frc.robot.commands.AutoCommands.TwoBall;
@@ -20,6 +19,10 @@ import frc.robot.commands.ClimberCommands.ExtendMidBarGroup;
 import frc.robot.commands.ClimberCommands.ManualClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimber;
+import frc.robot.commands.SettingsCommands.ToggleAlignTurret;
+import frc.robot.commands.SettingsCommands.ToggleFeederSystem;
+import frc.robot.commands.SettingsCommands.ToggleGrabOponentBalls;
+import frc.robot.commands.SettingsCommands.ToggleShootOponentBalls;
 import frc.robot.commands.ShooterCommands.IdleShooter;
 import frc.robot.commands.ShooterCommands.LowGoalShoot;
 import frc.robot.commands.ShooterCommands.ManualTurretControl;
@@ -30,11 +33,8 @@ import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.SettingsSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-
-
 
 public class RobotContainer {
 
@@ -47,7 +47,6 @@ public class RobotContainer {
   private static final Turret turret = new Turret();
   private static final Feeder feeder = new Feeder();
   private static final Climber climber = new Climber();
-  private static final SettingsSubsystem settingsSubsystem = new SettingsSubsystem();
   private final FourBallOne fourBallOne = new FourBallOne(driveBase, intake, shooter, limelight, turret, feeder, waitTime);
   private final TwoBall twoBall = new TwoBall(driveBase, intake, shooter, turret, limelight, feeder, waitTime);
   private final DemoAuto demoAuto = new DemoAuto(driveBase, intake, shooter, turret, feeder, limelight, 0);
@@ -57,11 +56,7 @@ public class RobotContainer {
   public static boolean grabOponentBalls = false;
   public static boolean stopFeederSystem = false;
   public static Boolean stopShooterSystem = false;
-
-
   static SendableChooser<Command> autoChooser = new SendableChooser<>();
-
-
 
   public RobotContainer() {
     driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, driverController.getLeftY(), driverController.getLeftX()));
@@ -69,7 +64,6 @@ public class RobotContainer {
     climber.setDefaultCommand(new ManualClimber(climber, operatorController.getLeftY()));
     feeder.setDefaultCommand(new PrepareBallsInFeeder(feeder));
     shooter.setDefaultCommand(new IdleShooter(shooter));
-    settingsSubsystem.setDefaultCommand(new toggleSettings(settingsSubsystem));
     
     configureButtonBindings();
 
@@ -79,8 +73,6 @@ public class RobotContainer {
     SmartDashboard.putData(autoChooser);
     waitTime = SmartDashboard.getNumber("Auto Wait", 0);
   }
-
-  
 
   private void configureButtonBindings() {
     new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake));
@@ -95,15 +87,16 @@ public class RobotContainer {
     new POVButton(operatorController, 270).whenPressed(new BarToBarGoup(climber));
     new POVButton(operatorController, 180).whenPressed(new RetractClimber(climber));
     new JoystickButton(operatorController, 6).whenPressed(new ToggleClimber(climber));
+
+    new JoystickButton(operatorController, 2).whenPressed(new ToggleGrabOponentBalls());
+    new JoystickButton(operatorController, 4).whenPressed(new ToggleShootOponentBalls());
+    new JoystickButton(operatorController, 1).whenPressed(new ToggleAlignTurret());
+    new JoystickButton(operatorController, 3).whenPressed(new ToggleFeederSystem());
   }
-
-
 
   public static void robotInit() {
     new RobotInit(limelight, climber, turret);
   }
-
-  
   
   public static Command getAutonomousCommand() {
     return autoChooser.getSelected();

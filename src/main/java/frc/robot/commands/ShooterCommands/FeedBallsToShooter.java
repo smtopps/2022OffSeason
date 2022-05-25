@@ -11,6 +11,7 @@ public class FeedBallsToShooter extends CommandBase {
   public final Feeder feeder;
   int counter = 0;
   boolean shooting = false;
+  public static double turretOffset = 0;
 
   public FeedBallsToShooter(Limelight limelight, Feeder feeder) {
     this.limelight = limelight;
@@ -40,26 +41,31 @@ public class FeedBallsToShooter extends CommandBase {
 
       if(RobotContainer.shootOpponentsBalls == false) {
         if(feeder.isBallInFeeder() && feeder.isBallRightColor() == false){
-          AlignTurret.turretOffset = -2;
-          feeder.feederStop();
+          turretOffset = -10;
+          feeder.feederSpeed(-8);
           SmartDashboard.putBoolean("Shooting", false);
           shooting = false;
           counter++;
         }else{
-          AlignTurret.turretOffset = 0;
+          turretOffset = 0;
           feeder.feederSpeed(-8);
           SmartDashboard.putBoolean("Shooting", true);
           shooting = true;
           counter ++;
         }
       }else{
-        AlignTurret.turretOffset = 0;
+        turretOffset = 0;
         feeder.feederSpeed(-8);
         SmartDashboard.putBoolean("Shooting", true);
         shooting = true;
         counter ++;
       }
     }else{
+      if(feeder.isBallInFeeder() && feeder.isBallRightColor() == false) {
+        turretOffset = -10;
+      }else{
+        turretOffset = 0;
+      }
       feeder.feederStop();
       SmartDashboard.putBoolean("Shooting", false);
       shooting = false;
@@ -69,7 +75,7 @@ public class FeedBallsToShooter extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    AlignTurret.turretOffset = 0;
+    turretOffset = 0;
     feeder.feederStop();
     SmartDashboard.putBoolean("Shooting", false);
     counter = 0;

@@ -16,7 +16,7 @@ public class RetractClimber extends CommandBase {
   @Override
   public void initialize() {
     climber.leftClimberSpeed(-10);
-    climber.rightClimberSpeed(10);
+    climber.rightClimberSpeed(-10);
   }
 
   @Override
