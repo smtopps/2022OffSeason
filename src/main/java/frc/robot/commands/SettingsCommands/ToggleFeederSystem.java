@@ -4,6 +4,7 @@
 
 package frc.robot.commands.SettingsCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
@@ -17,6 +18,7 @@ public class ToggleFeederSystem extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.stopFeederSystem = !RobotContainer.stopFeederSystem;
+    SmartDashboard.putBoolean("stopFeederSystem", RobotContainer.stopFeederSystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,6 +32,6 @@ public class ToggleFeederSystem extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

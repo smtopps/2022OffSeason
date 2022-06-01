@@ -15,7 +15,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class DriveBaseTrajectory extends SubsystemBase {
   WPI_TalonFX LEFT_LEADER = new WPI_TalonFX(Constants.LEFT_LEADER_ID);
@@ -100,10 +99,8 @@ public class DriveBaseTrajectory extends SubsystemBase {
     return rightPIDController;
   }
 
-  public void arcadedrive() {
-    throttle = RobotContainer.driverController.getLeftY();
-    rotation = RobotContainer.driverController.getLeftX();
-    DRIVE.arcadeDrive(throttle, rotation);
+  public void arcadedrive(double throttle, double rotation, boolean squared) {
+    DRIVE.arcadeDrive(throttle, rotation, squared);
   }
 
   public void setmaxoutput(double maxOutput) {

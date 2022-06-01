@@ -10,11 +10,13 @@ public class RobotInit extends CommandBase {
   Climber climber;
   Turret turret;
   Boolean done = false;
+  int OneIsAutoTwoIsTelop;
 
-  public RobotInit(Limelight limelight, Climber climber, Turret turret) {
+  public RobotInit(Limelight limelight, Climber climber, Turret turret, int OneIsAutoTwoIsTelop) {
     this.limelight = limelight;
     this.climber = climber;
     this.turret = turret;
+    this.OneIsAutoTwoIsTelop = OneIsAutoTwoIsTelop;
     addRequirements(limelight, climber, turret);
   }
 
@@ -24,7 +26,9 @@ public class RobotInit extends CommandBase {
     limelight.setCameraMode(1);
     limelight.setStream(2);
     climber.compressorEnable();
-    turret.resetTurretEncoder();
+    if(OneIsAutoTwoIsTelop == 1) {
+      turret.resetTurretEncoder();
+    }else if(OneIsAutoTwoIsTelop == 2){}
     done = true;
   }
 

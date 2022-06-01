@@ -1,14 +1,16 @@
 package frc.robot.commands.ClimberCommands;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 
 public class ManualClimber extends CommandBase {
   Climber climber;
-  double leftYJoystick;
+  DoubleSupplier leftYJoystick;
 
-  public ManualClimber(Climber climber, double leftYJoystick) {
+  public ManualClimber(Climber climber, DoubleSupplier leftYJoystick) {
     this.climber = climber;
     this.leftYJoystick = leftYJoystick;
     addRequirements(climber);
@@ -19,8 +21,8 @@ public class ManualClimber extends CommandBase {
 
   @Override
   public void execute() {
-    climber.leftClimberSpeed(RobotContainer.operatorController.getLeftY()*10);
-    climber.rightClimberSpeed(RobotContainer.operatorController.getLeftY()*10);
+    climber.leftClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.02)*-10);
+    climber.rightClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.02)*-10);
   }
 
   @Override

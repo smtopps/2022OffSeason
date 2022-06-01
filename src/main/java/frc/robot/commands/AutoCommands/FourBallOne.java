@@ -17,14 +17,14 @@ public class FourBallOne extends SequentialCommandGroup {
   public FourBallOne(DriveBase driveBase, Intake intake, Shooter shooter, Limelight limelight, Turret turret, Feeder feeder, double waitTime) {
     addCommands(
       new WaitCommand(waitTime),
-      new DriveByDistanceBasic(driveBase, 10, 0.4, 0.4),
+      new DriveByDistanceBasic(driveBase, 10, 0.4),
       new ShootBalls(shooter, turret, limelight, feeder),
       new ParallelRaceGroup(
         new RunIntake(intake),
-        new DriveByDistanceBasic(driveBase, 6, 0.2, 0.2)
+        new DriveByDistanceBasic(driveBase, 6, 0.2)
       ),
       new ShootBalls(shooter, turret, limelight, feeder),
-      new TurnByAngleBasic(driveBase, 75, 0.2, 0.2),
+      new TurnByAngleBasic(driveBase, 75, 0.2),
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new WaitCommand(1),
@@ -33,10 +33,10 @@ public class FourBallOne extends SequentialCommandGroup {
             new RunIntake(intake)
             )
           ),
-        new DriveByDistanceBasic(driveBase, 30, 0.5, 0.5)
+        new DriveByDistanceBasic(driveBase, 30, 0.5)
       ),
-      new TurnByAngleBasic(driveBase, 140, 0.5, 0.5),
-      new DriveByDistanceBasic(driveBase, 20, 0.5, 0.5),
+      new TurnByAngleBasic(driveBase, 140, 0.5),
+      new DriveByDistanceBasic(driveBase, 20, 0.5),
       new ShootBalls(shooter, turret, limelight, feeder)
     );
   }

@@ -41,16 +41,14 @@ public class RevShooter extends CommandBase {
       RPM = -1600;
     }else{
       //RPM = -(3210+(-95.8*limelight.getTY())+2.69*(Math.pow(limelight.getTY(), 2)));
-      RPM = -((-30.088*limelight.getTY())+1829.5);
+      RPM = -((-30.088*limelight.getTY())+1829.5)-FeedBallsToShooter.shooterOffset;
     }
 
     SmartDashboard.putNumber("Set RPM", RPM);
 
     if((Math.abs(shooter.getFlywheelRPM() - RPM)) < 50) {
       Counter++;
-    }/*else{
-      Counter = 0;
-    }*/
+    }
 
     if(limelight.getTV() == 1 && Counter >= 3 && limelight.getTY() <= 8 && limelight.getTY() >= -12) {
       FlywheelAtSpeed = true;

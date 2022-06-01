@@ -4,6 +4,7 @@
 
 package frc.robot.commands.SettingsCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
@@ -17,6 +18,7 @@ public class ToggleAlignTurret extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.toggleAlignTurret = !RobotContainer.toggleAlignTurret;
+    SmartDashboard.putBoolean("toggleAlignTurret", RobotContainer.toggleAlignTurret);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -24,7 +24,7 @@ public class TwoBall extends SequentialCommandGroup {
       new WaitCommand(0.3),
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
-        new DriveByDistanceBasic(driveBase, 32, 0.2, 0.2),
+        new DriveByDistanceBasic(driveBase, 32, 0.2),
         new RunIntake(intake),
         new PrepareBallsInFeeder(feeder),
         new IdleShooter(shooter)
@@ -33,7 +33,7 @@ public class TwoBall extends SequentialCommandGroup {
       new ToggleIntake(intake, 1),
       new WaitCommand(0.5),
       new ResetDriveEncoder(driveBase),
-      new DriveByDistanceBasic(driveBase, 12, 0.3, 0.3)
+      new DriveByDistanceBasic(driveBase, 12, 0.3)
     );
   }
 }

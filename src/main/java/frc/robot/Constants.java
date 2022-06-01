@@ -59,4 +59,7 @@ public final class Constants {
     public static final int CLIMBER_RIGHT_MOTOR_ID = 32;
 
     public static final int PIGEON2_ID = 4;
+    public static final double turretOffestForOpponentsBall = -14;
+    public static final double shooterOffsetForOpponentsBall = -600;
+    public static final double CLIMBER_RETRACTION_ERROR = 0; //larger the number the quicker the climber will react to arms being out of sync when retracting. 0.2 may be a good starting point
 }

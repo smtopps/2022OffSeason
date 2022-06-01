@@ -23,6 +23,7 @@ import frc.robot.commands.SettingsCommands.ToggleAlignTurret;
 import frc.robot.commands.SettingsCommands.ToggleFeederSystem;
 import frc.robot.commands.SettingsCommands.ToggleGrabOponentBalls;
 import frc.robot.commands.SettingsCommands.ToggleShootOponentBalls;
+import frc.robot.commands.SettingsCommands.ToggleShooterIdle;
 import frc.robot.commands.ShooterCommands.IdleShooter;
 import frc.robot.commands.ShooterCommands.LowGoalShoot;
 import frc.robot.commands.ShooterCommands.ManualTurretControl;
@@ -55,17 +56,23 @@ public class RobotContainer {
   public static boolean toggleAlignTurret = true;
   public static boolean grabOponentBalls = false;
   public static boolean stopFeederSystem = false;
-  public static Boolean stopShooterSystem = false;
+  public static boolean stopShooterSystem = false;
   static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   public RobotContainer() {
-    driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, driverController.getLeftY(), driverController.getLeftX()));
-    turret.setDefaultCommand(new ManualTurretControl(turret, operatorController.getRightX()));
-    climber.setDefaultCommand(new ManualClimber(climber, operatorController.getLeftY()));
+    driveBase.setDefaultCommand(new DriveWithJoystick(driveBase, () -> driverController.getLeftY(), () -> driverController.getLeftX()));
+    turret.setDefaultCommand(new ManualTurretControl(turret, () -> operatorController.getRightX()));
+    climber.setDefaultCommand(new ManualClimber(climber, () -> operatorController.getLeftY()));
     feeder.setDefaultCommand(new PrepareBallsInFeeder(feeder));
     shooter.setDefaultCommand(new IdleShooter(shooter));
     
     configureButtonBindings();
+
+    SmartDashboard.putBoolean("shootOpponentsBalls", shootOpponentsBalls);
+    SmartDashboard.putBoolean("toggleAlignTurret", toggleAlignTurret);
+    SmartDashboard.putBoolean("grabOpponentBalls", grabOponentBalls);
+    SmartDashboard.putBoolean("stopFeederSystem", stopFeederSystem);
+    SmartDashboard.putBoolean("stopShooterSystem", stopShooterSystem);
 
     autoChooser.setDefaultOption("4 Ball 1", fourBallOne);
     autoChooser.addOption("2 Ball", twoBall);
@@ -77,7 +84,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake));
     new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake, 3));
-    new JoystickButton(operatorController, 8).whenPressed(new ResetTurretEncoder(turret));
+    new JoystickButton(operatorController, 7).whenPressed(new ResetTurretEncoder(turret));
     new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder));
     new JoystickButton(driverController, 2).whenHeld(new LowGoalShoot(feeder));
     //new JoystickButton(driverController, 3).whenPressed(new KilllEverything(climber, driveBase, feeder, intake, limelight, shooter, turret));
@@ -92,10 +99,15 @@ public class RobotContainer {
     new JoystickButton(operatorController, 4).whenPressed(new ToggleShootOponentBalls());
     new JoystickButton(operatorController, 1).whenPressed(new ToggleAlignTurret());
     new JoystickButton(operatorController, 3).whenPressed(new ToggleFeederSystem());
+    new JoystickButton(operatorController, 8).whenPressed(new ToggleShooterIdle());
   }
 
-  public static void robotInit() {
-    new RobotInit(limelight, climber, turret);
+  public static void atuoInit() {
+    new RobotInit(limelight, climber, turret, 1);
+  }
+
+  public static void teleopInit() {
+    new RobotInit(limelight, climber, turret, 2);
   }
   
   public static Command getAutonomousCommand() {

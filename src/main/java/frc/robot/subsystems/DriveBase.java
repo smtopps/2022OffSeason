@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class DriveBase extends SubsystemBase {
   WPI_TalonFX LEFT_LEADER;
@@ -24,6 +23,11 @@ public class DriveBase extends SubsystemBase {
     RIGHT_LEADER = new WPI_TalonFX(Constants.RIGHT_LEADER_ID);
     RIGHT_FOLLOW = new WPI_TalonFX(Constants.RIGHT_FOLLOW_ID);
 
+    LEFT_LEADER.configFactoryDefault();
+    LEFT_FOLLOW.configFactoryDefault();
+    RIGHT_LEADER.configFactoryDefault();
+    RIGHT_FOLLOW.configFactoryDefault();
+
     LEFT_FOLLOW.follow(LEFT_LEADER);
     RIGHT_FOLLOW.follow(RIGHT_LEADER);
 
@@ -39,10 +43,11 @@ public class DriveBase extends SubsystemBase {
     SmartDashboard.putNumber("Right Encoder Distance", getRightEncoderDistance());
   }
 
-  public void arcadedrive() {
-    throttle = RobotContainer.driverController.getLeftY();
-    rotation = RobotContainer.driverController.getLeftX();
-    DRIVE.arcadeDrive(-throttle, rotation, true);
+  public void arcadedrive(double throttle, double rotation, boolean squared) {
+    DRIVE.arcadeDrive(
+      -throttle, 
+      rotation, 
+      squared);
   }
 
   public void autoArcadedrive(double throttle, double rotation) {

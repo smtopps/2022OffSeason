@@ -9,13 +9,11 @@ public class TurnByAngleBasic extends CommandBase {
   double angle;
   double distance;
   double maxSpeed;
-  double rampRate;
 
-  public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed, double rampRate) {
+  public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed) {
     this.driveBase = driveBase;
     this.angle = angle;
     this.maxSpeed = maxSpeed;
-    this.rampRate = rampRate;
     addRequirements(driveBase);
   }
 
@@ -24,7 +22,6 @@ public class TurnByAngleBasic extends CommandBase {
     SmartDashboard.putBoolean("TurnByAngle", true);
     driveBase.setneutralmode("Brake");
     driveBase.setdeadband(0.0);
-    driveBase.setRampRate(rampRate);
     driveBase.resetEncoderPosition();
   }
 

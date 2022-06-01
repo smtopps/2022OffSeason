@@ -21,26 +21,26 @@ public class DemoAuto extends SequentialCommandGroup {
       new WaitCommand(waitTime),
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
-        new DriveByDistanceBasic(driveBase, 48, 0.3, 0.6),
+        new DriveByDistanceBasic(driveBase, 48, 0.3),
         new RunIntake(intake),
         new PrepareBallsInFeeder(feeder)
       ),
       new ResetDriveEncoder(driveBase),
-      new TurnByAngleBasic(driveBase, 120, 0.3, 0.6),
+      new TurnByAngleBasic(driveBase, 120, 0.3),
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
-        new DriveByDistanceBasic(driveBase, 48, 0.3, 0.6),
+        new DriveByDistanceBasic(driveBase, 48, 0.3),
         new RunIntake(intake),
         new PrepareBallsInFeeder(feeder)
       ),
       new ToggleIntake(intake, 1),
       new ResetDriveEncoder(driveBase),
-      new TurnByAngleBasic(driveBase, -60, 0.3, 0.6),
+      new TurnByAngleBasic(driveBase, -60, 0.3),
       new ResetDriveEncoder(driveBase),
-      new DriveByDistanceBasic(driveBase, -48, 0.3, 0.6),
+      new DriveByDistanceBasic(driveBase, -48, 0.3),
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
-        new TurnByAngleBasic(driveBase, 30, 0.3, 0.6),
+        new TurnByAngleBasic(driveBase, 30, 0.3),
         new IdleShooter(shooter) 
       ),
       new ShootBalls(shooter, turret, limelight, feeder)

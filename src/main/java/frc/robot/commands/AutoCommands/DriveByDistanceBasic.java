@@ -8,13 +8,11 @@ public class DriveByDistanceBasic extends CommandBase {
   DriveBase driveBase;
   double distance;
   double maxSpeed;
-  double rampRate;
 
-  public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed, double rampRate) {
+  public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed) {
     this.driveBase = driveBase;
     this.distance = distance;
     this.maxSpeed = maxSpeed;
-    this.rampRate = rampRate;
     addRequirements(driveBase);
   }
 
@@ -23,7 +21,6 @@ public class DriveByDistanceBasic extends CommandBase {
     SmartDashboard.putBoolean("DriveByDistance", true);
     driveBase.setneutralmode("Brake");
     driveBase.setdeadband(0.0);
-    driveBase.setRampRate(rampRate);
     driveBase.resetEncoderPosition();
   }
 

@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -29,12 +30,18 @@ public class Climber extends SubsystemBase {
     //CLIMBER_LEFT_MOTOR.setSmartCurrentLimit(40);
     //CLIMBER_RIGHT_MOTOR.setSmartCurrentLimit(40);
 
+    CLIMBER_LEFT_MOTOR.setInverted(false);
+    CLIMBER_RIGHT_MOTOR.setInverted(true);
+
     CLIMBER_LEFT_ENCODER = CLIMBER_LEFT_MOTOR.getEncoder();
     CLIMBER_RIGHT_ENCODER = CLIMBER_RIGHT_MOTOR.getEncoder();
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("ClimberLeftEncoder", leftClimberEncoder());
+    SmartDashboard.putNumber("ClimberRightEncoder", rightClimberEncoder());
+  }
 
   public void leftClimberSpeed(double voltage) {
     CLIMBER_LEFT_MOTOR.setVoltage(voltage);
