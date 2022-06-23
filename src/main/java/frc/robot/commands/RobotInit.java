@@ -22,6 +22,7 @@ public class RobotInit extends CommandBase {
 
   @Override
   public void initialize() {
+    System.out.println("RobotInit");
     limelight.setLEDMode(1);
     limelight.setCameraMode(1);
     limelight.setStream(2);
@@ -40,10 +41,11 @@ public class RobotInit extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(done == true){
+    /*if(done == true){
       return true;
     }else{
       return false;
-    }
+    }*/
+    return true;
   }
 }

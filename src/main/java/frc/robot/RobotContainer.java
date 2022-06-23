@@ -64,7 +64,7 @@ public class RobotContainer {
     turret.setDefaultCommand(new ManualTurretControl(turret, () -> operatorController.getRightX()));
     climber.setDefaultCommand(new ManualClimber(climber, () -> operatorController.getLeftY()));
     feeder.setDefaultCommand(new PrepareBallsInFeeder(feeder));
-    shooter.setDefaultCommand(new IdleShooter(shooter));
+    shooter.setDefaultCommand(new IdleShooter(shooter, limelight));
     
     configureButtonBindings();
 

@@ -41,7 +41,7 @@ public class DemoAuto extends SequentialCommandGroup {
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
         new TurnByAngleBasic(driveBase, 30, 0.3),
-        new IdleShooter(shooter) 
+        new IdleShooter(shooter, limelight) 
       ),
       new ShootBalls(shooter, turret, limelight, feeder)
     );

@@ -27,13 +27,14 @@ public final class Constants {
     public static final int LEFT_FOLLOW_ID = 25;
     public static final int RIGHT_LEADER_ID = 22;
     public static final int RIGHT_FOLLOW_ID = 24;
-    public static final double MAX_SPEED_DRIVE = 1;
+    public static final double MAX_SPEED_DRIVE = 0.5;
     public static final double DEADBAND_DRIVE = 0.02;
     public static final String NEUTRAL_MODE_DRIVE = "Brake";
     public static final double RAMP_RATE_DRIVE = 0.1;
 
     //Intake Motor ID and information
     public static final int INTAKE_ID = 28;
+    public static final int INTAKE_ROTATION_ID = 0;
     public static final int INTAKE_POSITION = 8;
     public static final double MAX_SPEED_DRIVE_INTAKE = 0.2;
     public static final double INTAKE_SPEED = 0.8;

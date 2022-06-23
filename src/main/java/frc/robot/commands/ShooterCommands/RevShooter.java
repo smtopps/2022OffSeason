@@ -35,7 +35,7 @@ public class RevShooter extends CommandBase {
   public void execute() {
     distance = limelight.getTY();
 
-    shooter.setFlywheelRPM(RPM); //-40
+    shooter.setFlywheelRPM(RPM-20);
 
     if(limelight.getTV() == 0){
       RPM = -1600;

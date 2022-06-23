@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    RobotContainer.atuoInit();
+    //RobotContainer.atuoInit();
     RobotContainer.getAutonomousCommand().schedule();
   }
 
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    RobotContainer.teleopInit();
+    //RobotContainer.teleopInit();
   }
 
   @Override

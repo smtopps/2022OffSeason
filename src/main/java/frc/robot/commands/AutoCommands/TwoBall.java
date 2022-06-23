@@ -27,7 +27,7 @@ public class TwoBall extends SequentialCommandGroup {
         new DriveByDistanceBasic(driveBase, 32, 0.2),
         new RunIntake(intake),
         new PrepareBallsInFeeder(feeder),
-        new IdleShooter(shooter)
+        new IdleShooter(shooter, limelight)
       ),
       new ShootBalls(shooter, turret, limelight, feeder),
       new ToggleIntake(intake, 1),
