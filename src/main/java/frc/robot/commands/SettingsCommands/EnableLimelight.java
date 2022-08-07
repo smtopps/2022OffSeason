@@ -4,21 +4,28 @@
 
 package frc.robot.commands.SettingsCommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class ToggleShooterIdle extends CommandBase {
+public class EnableLimelight extends CommandBase {
   /** Creates a new ToggleShooterIdle. */
-  public ToggleShooterIdle() {
+  int Toggle;
+  public EnableLimelight(int OneFalseTwoTrueThreeToggle) {
+    this.Toggle = OneFalseTwoTrueThreeToggle;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.stopShooterSystem = !RobotContainer.stopShooterSystem;
-    SmartDashboard.putBoolean("stopShooterSystem", RobotContainer.stopFeederSystem);
+    if(Toggle == 3) {
+      RobotContainer.enableLimelight = !RobotContainer.enableLimelight;
+    }else if(Toggle == 1) {
+      RobotContainer.enableLimelight = false;
+    }else if(Toggle == 2) {
+      RobotContainer.enableLimelight = true;
+    }
+    //SmartDashboard.putBoolean("Enable Limelight", RobotContainer.enableLimelight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

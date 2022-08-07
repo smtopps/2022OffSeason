@@ -25,7 +25,7 @@ public class IdleShooter extends CommandBase {
 
   @Override
   public void execute() {
-    if(RobotContainer.stopShooterSystem == false){
+    if(RobotContainer.enableIdle == true){
       shooter.setRampRate(0.5);
       shooter.setFlywheelRPM(-1250);
     }else{

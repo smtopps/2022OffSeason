@@ -19,9 +19,7 @@ public class DriveTest extends CommandBase {
 
   @Override
   public void initialize() {
-    driveBase.setneutralmode("Brake");
-    driveBase.setdeadband(0.0);
-    driveBase.setRampRate(rampRate);
+    driveBase.setDeadband(0.0);
     time = Timer.getFPGATimestamp();
   }
 

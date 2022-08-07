@@ -1,13 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class RetractIntake extends CommandBase {
+public class RetractIntakeCurrent extends CommandBase {
   public final Intake intake;
   public boolean holdIntake = false;
 
-  public RetractIntake(Intake intake) {
+  public RetractIntakeCurrent(Intake intake) {
     this.intake = intake;
     addRequirements(intake);
   }
@@ -23,7 +23,7 @@ public class RetractIntake extends CommandBase {
       intake.intakeRotationSpeed(-0.5);
     }
 
-    if(intake.intakeRotationCurrent() >= 60) {
+    if(intake.intakeRotationCurrent() > 20) {
       holdIntake = true;
     }
   }

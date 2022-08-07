@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.RunIntake;
+import frc.robot.commands.IntakeCommands.RunIntake;
 import frc.robot.commands.ShooterCommands.ShootBalls;
 import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.Feeder;
@@ -20,7 +20,7 @@ public class FourBallOne extends SequentialCommandGroup {
       new DriveByDistanceBasic(driveBase, 10, 0.4),
       new ShootBalls(shooter, turret, limelight, feeder),
       new ParallelRaceGroup(
-        new RunIntake(intake),
+        new RunIntake(intake, 0.8),
         new DriveByDistanceBasic(driveBase, 6, 0.2)
       ),
       new ShootBalls(shooter, turret, limelight, feeder),
@@ -30,7 +30,7 @@ public class FourBallOne extends SequentialCommandGroup {
           new WaitCommand(1),
           new ParallelRaceGroup(
             new WaitCommand(1),
-            new RunIntake(intake)
+            new RunIntake(intake, 0.8)
             )
           ),
         new DriveByDistanceBasic(driveBase, 30, 0.5)

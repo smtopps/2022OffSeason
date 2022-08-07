@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -14,16 +15,17 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX INTAKE_MOTOR;
-  private final CANSparkMax INTAKE_ROTATION_MOTOR;
+  private final CANSparkMax INTAKE_ROTATION_MOTOR = new CANSparkMax(Constants.INTAKE_ROTATION_ID, MotorType.kBrushless);
   private final Solenoid INTAKE_CYLINDER;
+  private final RelativeEncoder INTAKE_ROTATION_ENCODER = INTAKE_ROTATION_MOTOR.getEncoder();
 
   public Intake() {
     INTAKE_MOTOR = new WPI_TalonSRX(Constants.INTAKE_ID);
-    INTAKE_ROTATION_MOTOR = new CANSparkMax(Constants.INTAKE_ROTATION_ID, MotorType.kBrushless);
     INTAKE_MOTOR.setNeutralMode(NeutralMode.Coast);
     INTAKE_ROTATION_MOTOR.setIdleMode(IdleMode.kCoast);
     INTAKE_CYLINDER = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_POSITION);
-    INTAKE_ROTATION_MOTOR.setSmartCurrentLimit(40, 40);
+    INTAKE_ROTATION_MOTOR.setSmartCurrentLimit(20, 20);
+
   }
 
   @Override
@@ -55,5 +57,17 @@ public class Intake extends SubsystemBase {
 
   public double intakeRotationCurrent() {
     return INTAKE_ROTATION_MOTOR.getOutputCurrent();
+  }
+
+  public double getIntakeRotationSpeed() {
+    return INTAKE_ROTATION_ENCODER.getVelocity();
+  }
+
+  public double getIntakeRotationPosition() {
+    return INTAKE_ROTATION_ENCODER.getPosition();
+  }
+
+  public void setIntakeRotationPosition(double position) {
+    INTAKE_ROTATION_ENCODER.setPosition(position);
   }
 }

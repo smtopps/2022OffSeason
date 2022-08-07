@@ -3,7 +3,6 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.DriveBase;
 
 public class DriveWithJoystick extends CommandBase {
@@ -19,11 +18,7 @@ public class DriveWithJoystick extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-    driveBase.setmaxoutput(Constants.MAX_SPEED_DRIVE);
-    driveBase.setdeadband(Constants.DEADBAND_DRIVE);
-    driveBase.setneutralmode(Constants.NEUTRAL_MODE_DRIVE);
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {

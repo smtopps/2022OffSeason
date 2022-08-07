@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
@@ -47,6 +49,7 @@ public final class Constants {
     public static final double SHOOTER_KI = 0;
     public static final double SHOOTER_KD = 0;
     public static final double MAX_SPEED_DRIVE_SHOOT = 0.1;
+    public static final int HOOD_POSITION = 10;
 
     //Turret Motor ID and information
     public static final int TURRET_MOTOR_ID = 27;
@@ -59,8 +62,20 @@ public final class Constants {
     public static final int CLIMBER_LEFT_MOTOR_ID = 31;
     public static final int CLIMBER_RIGHT_MOTOR_ID = 32;
 
-    public static final int PIGEON2_ID = 4;
+    public static final int PIGEON2_ID = 2;
     public static final double turretOffestForOpponentsBall = -14;
     public static final double shooterOffsetForOpponentsBall = -600;
     public static final double CLIMBER_RETRACTION_ERROR = 0; //larger the number the quicker the climber will react to arms being out of sync when retracting. 0.2 may be a good starting point
+
+    public static final class AutoConstants {
+        public static final double kPRightController = 4.5;
+        public static final double kPLeftController = 4.5; //4
+        public static final double kTrackwidthMeters = Units.inchesToMeters(21.8685);
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
+        public static final double ks = 0.64503;
+        public static final double kv = 2.2412; //2.5412
+        public static final double ka = 0.55051;
+    }
 }

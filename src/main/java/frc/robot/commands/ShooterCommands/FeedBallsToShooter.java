@@ -30,7 +30,7 @@ public class FeedBallsToShooter extends CommandBase {
   public void execute() {
     if(RevShooter.FlywheelAtSpeed == true && AlignTurret.TurretAligned == true) {
 
-      if(RobotContainer.shootOpponentsBalls == false) {
+      if(RobotContainer.enableColorSensor == true) {
         if(feeder.isBallInFeeder() && feeder.isBallRightColor() == false){
           turretOffset = Constants.turretOffestForOpponentsBall;
           shooterOffset = Constants.shooterOffsetForOpponentsBall;
@@ -49,17 +49,28 @@ public class FeedBallsToShooter extends CommandBase {
         SmartDashboard.putBoolean("Shooting", true);
         shooting = true;
         counter ++;
+        turretOffset = 0;
+        shooterOffset = 0;
       }
     }else{
-      if(feeder.isBallInFeeder() && feeder.isBallRightColor() == false) {
-        turretOffset = Constants.turretOffestForOpponentsBall;
-        shooterOffset = Constants.shooterOffsetForOpponentsBall;
+      if(RobotContainer.enableColorSensor == true) {
+        if(feeder.isBallInFeeder() && feeder.isBallRightColor() == false) {
+          turretOffset = Constants.turretOffestForOpponentsBall;
+          shooterOffset = Constants.shooterOffsetForOpponentsBall;
+        }
+  
+        feeder.feederStop();
+        SmartDashboard.putBoolean("Shooting", false);
+        shooting = false;
+        counter = 0;
+      }else{
+        turretOffset = 0;
+        shooterOffset = 0;
+        feeder.feederStop();
+        SmartDashboard.putBoolean("Shooting", false);
+        shooting = false;
+        counter = 0;
       }
-
-      feeder.feederStop();
-      SmartDashboard.putBoolean("Shooting", false);
-      shooting = false;
-      counter = 0;
     }
   }
 

@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.ToggleIntake;
+import frc.robot.commands.IntakeCommands.RunIntake;
+import frc.robot.commands.IntakeCommands.ToggleIntake;
 import frc.robot.commands.ShooterCommands.IdleShooter;
 import frc.robot.commands.ShooterCommands.ShootBalls;
 import frc.robot.subsystems.DriveBase;
@@ -25,7 +25,7 @@ public class TwoBall extends SequentialCommandGroup {
       new ResetDriveEncoder(driveBase),
       new ParallelRaceGroup(
         new DriveByDistanceBasic(driveBase, 32, 0.2),
-        new RunIntake(intake),
+        new RunIntake(intake, 0.8),
         new PrepareBallsInFeeder(feeder),
         new IdleShooter(shooter, limelight)
       ),

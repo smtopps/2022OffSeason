@@ -20,8 +20,7 @@ public class TurnByAngleBasic extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("TurnByAngle", true);
-    driveBase.setneutralmode("Brake");
-    driveBase.setdeadband(0.0);
+    driveBase.setDeadband(0.0);
     driveBase.resetEncoderPosition();
   }
 

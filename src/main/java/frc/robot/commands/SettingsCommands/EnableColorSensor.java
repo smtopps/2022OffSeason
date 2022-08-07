@@ -4,21 +4,28 @@
 
 package frc.robot.commands.SettingsCommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class ToggleAlignTurret extends CommandBase {
-  /** Creates a new ToggleAlignTurret. */
-  public ToggleAlignTurret() {
+public class EnableColorSensor extends CommandBase {
+  /** Creates a new ToggleGrabOponentBalls. */
+  int Toggle;
+  public EnableColorSensor(int OneFalseTwoTrueThreeToggle) {
+    this.Toggle = OneFalseTwoTrueThreeToggle;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.toggleAlignTurret = !RobotContainer.toggleAlignTurret;
-    SmartDashboard.putBoolean("toggleAlignTurret", RobotContainer.toggleAlignTurret);
+    if(Toggle == 3) {
+      RobotContainer.enableColorSensor = !RobotContainer.enableColorSensor;
+    }else if(Toggle == 1) {
+      RobotContainer.enableColorSensor = false;
+    }else if(Toggle == 2) {
+      RobotContainer.enableColorSensor = true;
+    }
+    //SmartDashboard.putBoolean("Enable Color Sensor", RobotContainer.enableColorSensor);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

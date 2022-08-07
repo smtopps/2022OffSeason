@@ -12,6 +12,7 @@ public class ShootBalls extends ParallelRaceGroup {
     addCommands(
       new AlignTurret(turret, limelight),
       new RevShooter(shooter, limelight),
+      //new TuneShooter(shooter, limelight),
       new FeedBallsToShooter(limelight, feeder)
     );
   }

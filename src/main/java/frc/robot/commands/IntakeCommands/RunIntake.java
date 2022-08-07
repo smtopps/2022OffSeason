@@ -1,16 +1,17 @@
-package frc.robot.commands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
   public final Intake intake;
+  public double speed;
   //public boolean holdIntake = false;
 
-  public RunIntake(Intake intake) {
+  public RunIntake(Intake intake, double speed) {
     this.intake = intake;
+    this.speed = speed;
     addRequirements(intake);
   }
 
@@ -22,14 +23,18 @@ public class RunIntake extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakeSpeed(Constants.INTAKE_SPEED);
+    intake.intakeSpeed(speed);
     /*if(holdIntake == false) {
       intake.intakeRotationSpeed(1);
     }else{
       intake.intakeRotationSpeed(0.5);
-    }
+    }*/
 
-    if(intake.intakeRotationCurrent() >= 60) {
+    /*if(intake.intakeRotationCurrent() > 20) {
+      holdIntake = true;
+    }*/
+
+    /*if(Math.abs(intake.getIntakeRotationSpeed()) < 1) {
       holdIntake = true;
     }*/
   }

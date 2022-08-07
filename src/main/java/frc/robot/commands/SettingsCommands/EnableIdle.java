@@ -4,21 +4,28 @@
 
 package frc.robot.commands.SettingsCommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class ToggleGrabOponentBalls extends CommandBase {
-  /** Creates a new ToggleGrabOponentBalls. */
-  public ToggleGrabOponentBalls() {
+public class EnableIdle extends CommandBase {
+  /** Creates a new ToggleShootOponentBalls. */
+  int Toggle;
+  public EnableIdle(int OneFalseTwoTrueThreeToggle) {
+    this.Toggle = OneFalseTwoTrueThreeToggle;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.grabOponentBalls = !RobotContainer.grabOponentBalls;
-    SmartDashboard.putBoolean("grabOponentsBalls", RobotContainer.grabOponentBalls);
+    if(Toggle == 3) {
+      RobotContainer.enableIdle = !RobotContainer.enableIdle;
+    }else if(Toggle == 1) {
+      RobotContainer.enableIdle = false;
+    }else if(Toggle == 2) {
+      RobotContainer.enableIdle = true;
+    }
+    //SmartDashboard.putBoolean("Enable Idle", RobotContainer.enableIdle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
