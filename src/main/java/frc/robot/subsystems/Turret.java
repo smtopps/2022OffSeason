@@ -11,94 +11,92 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
-  WPI_TalonSRX TURRET_MOTOR;
-  double TURRET_ENCODER;
-  DigitalInput TURRET_LEFT_LIMIT_SWITCH;
-  DigitalInput TURRET_RIGHT_LIMIT_SWITCH;
-  DigitalInput TURRET_CENTER_LIMIT_SWITCH;
+  private final WPI_TalonSRX turretMotor = new WPI_TalonSRX(Constants.TURRET_MOTOR_ID);
+  private final DigitalInput leftTurretLimitSwitch = new DigitalInput(0);
+  private final DigitalInput rightTurretLimitSwitch = new DigitalInput(1);
+  private final DigitalInput centerTurretLimitSwitch = new DigitalInput(2);
 
   public Turret() {
-    TURRET_MOTOR = new WPI_TalonSRX(Constants.TURRET_MOTOR_ID);
-    TURRET_LEFT_LIMIT_SWITCH = new DigitalInput(0);
-    TURRET_RIGHT_LIMIT_SWITCH = new DigitalInput(1);
-    TURRET_CENTER_LIMIT_SWITCH = new DigitalInput(2);
-    TURRET_MOTOR.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, 30);
-    TURRET_ENCODER = TURRET_MOTOR.getSelectedSensorPosition();
-    TURRET_MOTOR.setNeutralMode(NeutralMode.Brake);
-    //TURRET_MOTOR.configForwardSoftLimitThreshold(1024);
-    //TURRET_MOTOR.configReverseSoftLimitThreshold(-1024);
+    turretMotor.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, 30);
+    turretMotor.setNeutralMode(NeutralMode.Brake);
+    //turretMotor.configForwardSoftLimitThreshold(1024);
+    //turretMotor.configReverseSoftLimitThreshold(-1024);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Turret Encoder", TURRET_MOTOR.getSelectedSensorPosition() );
+    SmartDashboard.putNumber("Turret Encoder", turretMotor.getSelectedSensorPosition() );
+  }
+
+  public double turretPosition() {
+    return turretMotor.getSelectedSensorPosition();
   }
 
   public void turretSpeedEncoder1(double speed) {
-    if (TURRET_ENCODER <= 180 && TURRET_ENCODER >= -180) {
-      TURRET_MOTOR.set(ControlMode.PercentOutput, speed);
-    }else if (TURRET_ENCODER >= 180){
-      TURRET_MOTOR.set(ControlMode.PercentOutput, -0.1);
-    }else if (TURRET_ENCODER <= -180){
-      TURRET_MOTOR.set(ControlMode.PercentOutput, 0.1);
+    if (turretPosition() <= 180 && turretPosition() >= -180) {
+      turretMotor.set(ControlMode.PercentOutput, speed);
+    }else if (turretPosition() >= 180){
+      turretMotor.set(ControlMode.PercentOutput, -0.1);
+    }else if (turretPosition() <= -180){
+      turretMotor.set(ControlMode.PercentOutput, 0.1);
     }
   }
 
   public void turretSpeedEncoder2(double speed) {
-    if (TURRET_ENCODER <= 180 && speed > 0) {
-      TURRET_MOTOR.set(ControlMode.PercentOutput, speed);   
-    }else if (TURRET_ENCODER >= -180 && speed < 0) {
-      TURRET_MOTOR.set(ControlMode.PercentOutput, speed);   
+    if (turretPosition() <= 180 && speed > 0) {
+      turretMotor.set(ControlMode.PercentOutput, speed);   
+    }else if (turretPosition() >= -180 && speed < 0) {
+      turretMotor.set(ControlMode.PercentOutput, speed);   
     }else {
-      TURRET_MOTOR.stopMotor();    
+      turretMotor.stopMotor();    
     }
   }
 
   public void turretSpeed(double speed) {
-    TURRET_MOTOR.set(ControlMode.PercentOutput, speed);
+    turretMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void turretSpeedLimitSwitch(double speed) {
-    if (TURRET_LEFT_LIMIT_SWITCH.get() && speed <= 0) {
-      TURRET_MOTOR.stopMotor();
-    }else if (TURRET_RIGHT_LIMIT_SWITCH.get() && speed >=0) {
-      TURRET_MOTOR.stopMotor();
+    if (leftTurretLimitSwitch.get() && speed <= 0) {
+      turretMotor.stopMotor();
+    }else if (rightTurretLimitSwitch.get() && speed >=0) {
+      turretMotor.stopMotor();
     }else{
-      TURRET_MOTOR.set(speed);
+      turretMotor.set(speed);
     }
   }
 
   public void centerTurretEncoder() {
-    double speed = Math.abs(TURRET_MOTOR.getSelectedSensorPosition() * -0);
-    if (TURRET_MOTOR.getSelectedSensorPosition() <= -12) {
-      TURRET_MOTOR.set(ControlMode.PercentOutput, speed);   
-    }else if (TURRET_MOTOR.getSelectedSensorPosition() >= 12) {
-      TURRET_MOTOR.set(ControlMode.PercentOutput, speed);   
+    double speed = Math.abs(turretMotor.getSelectedSensorPosition() * -0);
+    if (turretMotor.getSelectedSensorPosition() <= -12) {
+      turretMotor.set(ControlMode.PercentOutput, speed);   
+    }else if (turretMotor.getSelectedSensorPosition() >= 12) {
+      turretMotor.set(ControlMode.PercentOutput, speed);   
     }else {
-      TURRET_MOTOR.stopMotor();    
+      turretMotor.stopMotor();    
     }
   }
 
   public void centerTurretLimitSwitch() {
     double voltage = -1;
-    if (TURRET_CENTER_LIMIT_SWITCH.get()) {
-      TURRET_MOTOR.stopMotor();
-    }else if (TURRET_LEFT_LIMIT_SWITCH.get()) {
+    if (centerTurretLimitSwitch.get()) {
+      turretMotor.stopMotor();
+    }else if (leftTurretLimitSwitch.get()) {
       voltage = 1;
-      TURRET_MOTOR.setVoltage(voltage);
-    }else if (TURRET_RIGHT_LIMIT_SWITCH.get()) {
+      turretMotor.setVoltage(voltage);
+    }else if (rightTurretLimitSwitch.get()) {
       voltage = -1;
-      TURRET_MOTOR.setVoltage(voltage);
+      turretMotor.setVoltage(voltage);
     }else{
-      TURRET_MOTOR.setVoltage(voltage);
+      turretMotor.setVoltage(voltage);
     }
   }
 
   public void stopTurret() {
-    TURRET_MOTOR.stopMotor();
+    turretMotor.stopMotor();
   }
 
   public void resetTurretEncoder() {
-    TURRET_MOTOR.setSelectedSensorPosition(0);
+    turretMotor.setSelectedSensorPosition(0);
   }
 }

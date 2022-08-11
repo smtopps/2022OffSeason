@@ -30,9 +30,9 @@ public class PrepareBallsInFeeder extends CommandBase {
      * feeder.feederSpeed(-2.5);;
      * }
      */
-    if (RobotContainer.stopFeederSystem == false) {
+    if (RobotContainer.enableIdle == true) {
       SmartDashboard.putBoolean("Feeder System Activated", true);
-      if (RobotContainer.grabOponentBalls == false) {
+      if (RobotContainer.enableColorSensor == true) {
         SmartDashboard.putBoolean("Feeder Color Activated", true);
         if (feeder.isBallInFeeder() && feeder.isBallRightColor()) {
           feeder.feederStop();

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveBase;
 
 public class ResetDriveEncoder extends CommandBase {
-  DriveBase driveBase;
+  private final DriveBase driveBase;
 
   public ResetDriveEncoder(DriveBase driveBase) {
     this.driveBase = driveBase;

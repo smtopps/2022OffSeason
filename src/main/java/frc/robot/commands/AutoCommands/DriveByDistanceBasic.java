@@ -5,25 +5,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveBase;
 
 public class DriveByDistanceBasic extends CommandBase {
-  DriveBase driveBase;
-  double distance;
-  double maxSpeed;
-  double rampRate;
+  private final DriveBase driveBase;
+  private final double distance;
+  private final double maxSpeed;
 
-  public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed, double rampRate) {
+  public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed) {
     this.driveBase = driveBase;
     this.distance = distance;
     this.maxSpeed = maxSpeed;
-    this.rampRate = rampRate;
     addRequirements(driveBase);
   }
 
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("DriveByDistance", true);
-    driveBase.setneutralmode("Brake");
-    driveBase.setdeadband(0.0);
-    driveBase.setRampRate(rampRate);
+    driveBase.setDeadband(0.0);
     driveBase.resetEncoderPosition();
   }
 

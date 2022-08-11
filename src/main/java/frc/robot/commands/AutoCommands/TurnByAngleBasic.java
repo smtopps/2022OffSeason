@@ -5,26 +5,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveBase;
 
 public class TurnByAngleBasic extends CommandBase {
-  DriveBase driveBase;
-  double angle;
-  double distance;
-  double maxSpeed;
-  double rampRate;
+  private final DriveBase driveBase;
+  private final double angle;
+  private double distance;
+  private final double maxSpeed;
 
-  public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed, double rampRate) {
+  public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed) {
     this.driveBase = driveBase;
     this.angle = angle;
     this.maxSpeed = maxSpeed;
-    this.rampRate = rampRate;
     addRequirements(driveBase);
   }
 
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("TurnByAngle", true);
-    driveBase.setneutralmode("Brake");
-    driveBase.setdeadband(0.0);
-    driveBase.setRampRate(rampRate);
+    driveBase.setDeadband(0.0);
     driveBase.resetEncoderPosition();
   }
 

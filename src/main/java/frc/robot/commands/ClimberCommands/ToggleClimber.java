@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ToggleClimber extends CommandBase {
-  Climber climber;
+  private final Climber climber;
 
   public ToggleClimber(Climber climber) {
     this.climber = climber;

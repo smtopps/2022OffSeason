@@ -3,97 +3,179 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.AutoConstants;
 
 public class DriveBase extends SubsystemBase {
-  WPI_TalonFX LEFT_LEADER;
-  WPI_TalonFX LEFT_FOLLOW;
-  WPI_TalonFX RIGHT_LEADER;
-  WPI_TalonFX RIGHT_FOLLOW;
-  DifferentialDrive DRIVE;
-  double throttle;
-  double rotation;
+  private final WPI_TalonFX leftLeader = new WPI_TalonFX(Constants.LEFT_LEADER_ID);
+  private final WPI_TalonFX leftFollower = new WPI_TalonFX(Constants.LEFT_FOLLOW_ID);
+  private final WPI_TalonFX rightLeader = new WPI_TalonFX(Constants.RIGHT_LEADER_ID);
+  private final WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.RIGHT_FOLLOW_ID);
+  private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+  private final Field2d field2d = new Field2d();
+
+  private final DifferentialDriveOdometry odometry;
+
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("troubleshooting");
+  NetworkTableEntry leftReference = table.getEntry("left_reference");
+  NetworkTableEntry leftMeasurement = table.getEntry("left_measurement");
+  NetworkTableEntry rightReference = table.getEntry("right_reference");
+  NetworkTableEntry rightMeasurement = table.getEntry("right_measurement");
 
   public DriveBase() {
-    LEFT_LEADER = new WPI_TalonFX(Constants.LEFT_LEADER_ID);
-    LEFT_FOLLOW = new WPI_TalonFX(Constants.LEFT_FOLLOW_ID);
-    RIGHT_LEADER = new WPI_TalonFX(Constants.RIGHT_LEADER_ID);
-    RIGHT_FOLLOW = new WPI_TalonFX(Constants.RIGHT_FOLLOW_ID);
+    leftLeader.configFactoryDefault();
+    leftFollower.configFactoryDefault();
+    rightLeader.configFactoryDefault();
+    rightFollower.configFactoryDefault();
 
-    LEFT_FOLLOW.follow(LEFT_LEADER);
-    RIGHT_FOLLOW.follow(RIGHT_LEADER);
+    leftLeader.setNeutralMode(NeutralMode.Brake);
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    rightLeader.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
 
-    RIGHT_LEADER.setInverted(true);
-    RIGHT_FOLLOW.setInverted(true);
+    leftFollower.follow(leftLeader);
+    rightFollower.follow(rightLeader);
 
-    DRIVE = new DifferentialDrive(LEFT_LEADER, RIGHT_LEADER);
+    rightLeader.setInverted(true);
+    rightFollower.setInverted(true);
+
+    differentialDrive.setDeadband(0.02);
+
+    odometry = new DifferentialDriveOdometry(Pigeon2Subsystem.getGyroscopeRotation());
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Left Encoder Distance", getLeftEncoderDistance());
     SmartDashboard.putNumber("Right Encoder Distance", getRightEncoderDistance());
+    SmartDashboard.putNumber("Left Encoder Speed", getLeftEncoderSpeed());
+    SmartDashboard.putNumber("Right Encoder Speed", getRightEncoderSpeed());
+    SmartDashboard.putString("Pose", getPose().toString());
+    SmartDashboard.putData("Field", field2d);
+    field2d.setRobotPose(odometry.getPoseMeters());
+
+    odometry.update(Pigeon2Subsystem.getGyroscopeRotation(), getLeftEncoderDistance(), getRightEncoderDistance());
   }
 
-  public void arcadedrive() {
-    throttle = RobotContainer.driverController.getLeftY();
-    rotation = RobotContainer.driverController.getLeftX();
-    DRIVE.arcadeDrive(-throttle, rotation, true);
+  public void arcadedrive(double throttle, double rotation, boolean squared) {
+    differentialDrive.arcadeDrive(
+      -throttle, 
+      rotation, 
+      squared);
   }
 
   public void autoArcadedrive(double throttle, double rotation) {
-    DRIVE.arcadeDrive(throttle, rotation, false);
+    differentialDrive.arcadeDrive(throttle, rotation, false);
   }
 
   public void autoArcadeStop() {
-    DRIVE.stopMotor();
+    differentialDrive.stopMotor();
   }
 
-  public void setmaxoutput(double maxOutput) {
-    DRIVE.setMaxOutput(maxOutput);
+  public void setDeadband(double deadband) {
+    differentialDrive.setDeadband(deadband);
   }
 
-  public void setdeadband(double deadband) {
-    DRIVE.setDeadband(deadband);
-  }
+  private double nativeUnitsToDistanceMeters(double sensorCounts){
+    double kCountsPerRev = 2048;
+    double kGearRatio = (50/14)*(48/16);//10.71428571428571;
+    double kWheelRadiusInches = 5.6/2;
+		double motorRotations = (double)sensorCounts / kCountsPerRev;
+		double wheelRotations = motorRotations / kGearRatio;
+		double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
+		return positionMeters;
+	}
 
-  public void setneutralmode(String mode) {
-    if (mode == "Break") {
-    LEFT_LEADER.setNeutralMode(NeutralMode.Brake);
-    LEFT_FOLLOW.setNeutralMode(NeutralMode.Brake);
-    RIGHT_LEADER.setNeutralMode(NeutralMode.Brake);
-    RIGHT_FOLLOW.setNeutralMode(NeutralMode.Brake);
-    }
-    
-    else if (mode == "Coast") {
-    LEFT_LEADER.setNeutralMode(NeutralMode.Coast);
-    LEFT_FOLLOW.setNeutralMode(NeutralMode.Coast);
-    RIGHT_LEADER.setNeutralMode(NeutralMode.Coast);
-    RIGHT_FOLLOW.setNeutralMode(NeutralMode.Coast);
-    }
-  }
+  private double nativeUnitsToVelocityMetersPerSecond(double sensorCountsPer100ms){
+    double k100msPerSecond = 10;
+    double velocityMetersPerSecond = nativeUnitsToDistanceMeters(sensorCountsPer100ms) * k100msPerSecond;
+		return velocityMetersPerSecond;
+	}
 
   public double getLeftEncoderDistance() {
-    return (LEFT_LEADER.getSelectedSensorPosition() / 2048 / 10.7142857142857 * (Math.PI*5.6));
+    return nativeUnitsToDistanceMeters(leftLeader.getSelectedSensorPosition());
   }
 
   public double getRightEncoderDistance() {
-    return (RIGHT_LEADER.getSelectedSensorPosition() / 2040 / 10.7142857142857 * (Math.PI*5.6));
+    return nativeUnitsToDistanceMeters(rightLeader.getSelectedSensorPosition());
+  }
+
+  public double getLeftEncoderSpeed() {
+    return nativeUnitsToVelocityMetersPerSecond(leftLeader.getSelectedSensorVelocity());
+  }
+
+  public double getRightEncoderSpeed() {
+    return nativeUnitsToVelocityMetersPerSecond(rightLeader.getSelectedSensorVelocity());
   }
 
   public void resetEncoderPosition() {
-    LEFT_LEADER.setSelectedSensorPosition(0);
-    RIGHT_LEADER.setSelectedSensorPosition(0);
+    leftLeader.setSelectedSensorPosition(0);
+    rightLeader.setSelectedSensorPosition(0);
   }
 
-  public void setRampRate(double rampRate) {
-    LEFT_LEADER.configOpenloopRamp(rampRate);
-    RIGHT_LEADER.configOpenloopRamp(rampRate);
-    LEFT_LEADER.configClosedloopRamp(rampRate);
-    RIGHT_LEADER.configClosedloopRamp(rampRate);
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Trajectory trajectory) { // path planning
+    resetEncoderPosition();
+    odometry.resetPosition(trajectory.getInitialPose(), Pigeon2Subsystem.getGyroscopeRotation());
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftEncoderSpeed(), getRightEncoderSpeed());
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftLeader.setVoltage(leftVolts);
+    rightLeader.setVoltage(rightVolts);
+    differentialDrive.feed();
+  }
+
+  public Command createCommandForTrajectory(Trajectory trajectory) {
+    RamseteController ramseteController = new RamseteController();
+
+    PIDController leftController = new PIDController(AutoConstants.kPLeftController, 0, 0);
+    PIDController rightController = new PIDController(AutoConstants.kPRightController, 0, 0);
+
+    RamseteCommand controllerCommand = new RamseteCommand(
+      trajectory, 
+      this::getPose, 
+      ramseteController,
+      new SimpleMotorFeedforward(AutoConstants.ks, AutoConstants.kv, AutoConstants.ka), 
+      AutoConstants.kDriveKinematics, 
+      this::getWheelSpeeds, 
+      leftController,
+      rightController,
+      (leftVolts, rightVolts) -> {
+        this.tankDriveVolts(leftVolts, rightVolts);
+
+        leftMeasurement.setNumber(this.getWheelSpeeds().leftMetersPerSecond);
+        leftReference.setNumber(leftController.getSetpoint());
+
+        rightMeasurement.setNumber(this.getWheelSpeeds().rightMetersPerSecond);
+        rightReference.setNumber(rightController.getSetpoint());
+      }, 
+      this
+    );
+
+    return controllerCommand.andThen(() -> autoArcadeStop());
   }
 }

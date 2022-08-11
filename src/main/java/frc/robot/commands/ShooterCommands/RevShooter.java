@@ -12,10 +12,10 @@ public class RevShooter extends CommandBase {
   private final Shooter shooter;
   private final Limelight limelight;
 
-  private double RPM = 1250;
+  private double RPM = 1900;
   private int Counter = 0;
-
-  double distance = 0;
+  private int Delay = 0;
+  private boolean hoodPosition = false;
 
   public RevShooter(Shooter shooter, Limelight limelight) {
     this.shooter = shooter;
@@ -28,31 +28,54 @@ public class RevShooter extends CommandBase {
     limelight.setLEDMode(3);
     limelight.setCameraMode(0);
     limelight.setStream(1);
-    shooter.setRampRate(0.5);
   }
 
   @Override
   public void execute() {
-    distance = limelight.getTY();
-
-    shooter.setFlywheelRPM(RPM); //-40
-
-    if(limelight.getTV() == 0){
-      RPM = -1600;
-    }else{
-      //RPM = -(3210+(-95.8*limelight.getTY())+2.69*(Math.pow(limelight.getTY(), 2)));
-      RPM = -((-30.088*limelight.getTY())+1829.5);
+    if(limelight.getTV() == 0 && Delay == 0){
+      //hoodPosition = false;
+      //shooter.setHoodPosition(hoodPosition);
+      //Delay = 15;
+    }else if(limelight.getTV() == 1 && hoodPosition == false && limelight.getTY() < -2.5 && Delay == 0){
+      hoodPosition = true;
+      shooter.setHoodPosition(hoodPosition);
+      Delay = 15;
+    }else if(limelight.getTV() == 1 && hoodPosition == true && limelight.getTY() > 5 && Delay == 0){
+      hoodPosition = false;
+      shooter.setHoodPosition(hoodPosition);
+      Delay = 15;
     }
 
-    SmartDashboard.putNumber("Set RPM", RPM);
 
-    if((Math.abs(shooter.getFlywheelRPM() - RPM)) < 50) {
+    if(Delay > 0) {
+      Delay--;
+    }
+
+    if(limelight.getTV() == 0){
+      RPM = 1900;
+      System.out.println("does not see target");
+    }else if(limelight.getTV() == 1 && hoodPosition == false && Delay == 0){
+      RPM = (2421+(-57.7*limelight.getTY())+(1.57*(Math.pow(limelight.getTY(), 2))));
+      System.out.println("hood in low position");
+    }else if(limelight.getTV() == 1 && hoodPosition == true && Delay == 0){
+      RPM = (20+2435+(-67.2*limelight.getTY())+(1.99*(Math.pow(limelight.getTY(), 2))));
+      System.out.println("hood in high position");
+    }else{
+      System.out.println("issue");
+    }
+
+    shooter.setFlywheelRPM(-RPM);
+
+    SmartDashboard.putNumber("Set RPM", -RPM);
+    SmartDashboard.putNumber("Delay", Delay);
+
+    if((Math.abs(shooter.getFlywheelRPM() + RPM)) < 30 && Delay == 0) {
       Counter++;
-    }/*else{
+    }else if(Delay > 0){
       Counter = 0;
-    }*/
+    }
 
-    if(limelight.getTV() == 1 && Counter >= 3 && limelight.getTY() <= 8 && limelight.getTY() >= -12) {
+    if(limelight.getTV() == 1 && Counter >= 3 && limelight.getTY() <= 18.5 && limelight.getTY() >= -7 && Delay == 0) { //for low goal it was 8 to -12
       FlywheelAtSpeed = true;
     }else{
       FlywheelAtSpeed = false;
@@ -61,10 +84,10 @@ public class RevShooter extends CommandBase {
     if(limelight.getTV() == 0){
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
-    }else if(limelight.getTY() > 8){
+    }else if(limelight.getTY() > 18.5){ // for low goal was 8
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
-    }else if(limelight.getTY() < -12){
+    }else if(limelight.getTY() < -7){ // for low goal was -12
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
     }else{
@@ -79,8 +102,11 @@ public class RevShooter extends CommandBase {
   public void end(boolean interrupted) {
     FlywheelAtSpeed = false;
     shooter.stopMotors();
-    RPM = 1250;
+    hoodPosition = false;
+    shooter.setHoodPosition(false);
+    RPM = 1900;
     Counter = 0;
+    Delay = 0;
     SmartDashboard.putBoolean("FlywheelAtSpeed", false);
     RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 0);
     RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 0);

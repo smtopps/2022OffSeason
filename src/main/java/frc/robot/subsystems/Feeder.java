@@ -12,43 +12,42 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  CANSparkMax FEEDER_MOTOR;
-  ColorSensorV3 COLOR_SENSOR;
+  private final CANSparkMax indexerMotor = new CANSparkMax(Constants.FEEDER_MOTOR_ID, MotorType.kBrushless);
+  private final ColorSensorV3 indexerColorSensor = new ColorSensorV3(i2cPort);
   DriverStation.Alliance color;
 
   public Feeder() {
-    FEEDER_MOTOR = new CANSparkMax(Constants.FEEDER_MOTOR_ID, MotorType.kBrushless);
-    FEEDER_MOTOR.setIdleMode(IdleMode.kBrake);
-    COLOR_SENSOR = new ColorSensorV3(i2cPort);
-    
-    }
+    indexerMotor.setIdleMode(IdleMode.kBrake);
+    indexerMotor.setClosedLoopRampRate(0.5);
+    indexerMotor.setOpenLoopRampRate(0.5);
+  }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Feeder Proximity", COLOR_SENSOR.getProximity());
-    SmartDashboard.putNumber("Feeder Red", COLOR_SENSOR.getRed());
-    SmartDashboard.putNumber("Feeder Blue", COLOR_SENSOR.getBlue());
-    SmartDashboard.putNumber("Feeder Green", COLOR_SENSOR.getGreen());
+    SmartDashboard.putNumber("Feeder Proximity", indexerColorSensor.getProximity());
+    SmartDashboard.putNumber("Feeder Red", indexerColorSensor.getRed());
+    SmartDashboard.putNumber("Feeder Blue", indexerColorSensor.getBlue());
+    SmartDashboard.putNumber("Feeder Green", indexerColorSensor.getGreen());
     color = DriverStation.getAlliance();
-    }
+  }
 
   public void feederSpeed(double voltage) {
-    FEEDER_MOTOR.setVoltage(voltage);
+    indexerMotor.setVoltage(voltage);
   }
 
   public void feederStop() {
-    FEEDER_MOTOR.stopMotor();
+    indexerMotor.stopMotor();
   }
 
   public boolean isBallRightColor() {
     if(color == DriverStation.Alliance.Blue) {
-      if(COLOR_SENSOR.getBlue() > COLOR_SENSOR.getRed()) {
+      if(indexerColorSensor.getBlue() > indexerColorSensor.getRed()) {
         return true;
       }else{
         return false;
       }
     }else if(color == DriverStation.Alliance.Red) {
-      if(COLOR_SENSOR.getRed() > COLOR_SENSOR.getBlue()) {
+      if(indexerColorSensor.getRed() > indexerColorSensor.getBlue()) {
         return true;
       }else{
         return false;
@@ -59,7 +58,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public boolean isBallInFeeder() {
-    if (COLOR_SENSOR.getProximity() >=70) {
+    if (indexerColorSensor.getProximity() >=70) {
       return true;
     }else{
       return false;

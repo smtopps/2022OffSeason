@@ -3,6 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -10,33 +14,60 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  WPI_TalonSRX INTAKE_MOTOR;
-  Solenoid INTAKE_CYLINDER;
+  private final WPI_TalonSRX intakeRollerMotor = new WPI_TalonSRX(Constants.INTAKE_ID);
+  private final CANSparkMax intakeRotationMotor = new CANSparkMax(Constants.INTAKE_ROTATION_ID, MotorType.kBrushless);
+  private final Solenoid intakeRotationSolenoid = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_CHANNEL);
+  private final RelativeEncoder intakeRotationEncoder = intakeRotationMotor.getEncoder();
 
   public Intake() {
-    INTAKE_MOTOR = new WPI_TalonSRX(Constants.INTAKE_ID);
+    intakeRollerMotor.setNeutralMode(NeutralMode.Coast);
+    intakeRollerMotor.configOpenloopRamp(0.5);
+    intakeRollerMotor.configClosedloopRamp(0.5);
+    intakeRotationMotor.setIdleMode(IdleMode.kCoast);
+    intakeRotationMotor.setSmartCurrentLimit(20, 20);
 
-    INTAKE_MOTOR.setNeutralMode(NeutralMode.Coast);
-
-    INTAKE_CYLINDER = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_POSITION);
   }
 
   @Override
   public void periodic() {}
 
   public void intakeSpeed(double speed) {
-    INTAKE_MOTOR.set(ControlMode.PercentOutput, speed);
+    intakeRollerMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void intakeSetPosition(boolean position) {
-    INTAKE_CYLINDER.set(position);
+    intakeRotationSolenoid.set(position);
   }
 
   public void intakeTogglePosition() {
-    INTAKE_CYLINDER.toggle();
+    intakeRotationSolenoid.toggle();
   }
 
   public void intakeStop() {
-    INTAKE_MOTOR.stopMotor();
+    intakeRollerMotor.stopMotor();
+  }
+
+  public void intakeRotationSpeed(double voltage) {
+    intakeRotationMotor.setVoltage(voltage);
+  }
+
+  public void intakeRotationStop() {
+    intakeRotationMotor.stopMotor();
+  }
+
+  public double intakeRotationCurrent() {
+    return intakeRotationMotor.getOutputCurrent();
+  }
+
+  public double getIntakeRotationSpeed() {
+    return intakeRotationEncoder.getVelocity();
+  }
+
+  public double getIntakeRotationPosition() {
+    return intakeRotationEncoder.getPosition();
+  }
+
+  public void setIntakeRotationPosition(double position) {
+    intakeRotationEncoder.setPosition(position);
   }
 }
