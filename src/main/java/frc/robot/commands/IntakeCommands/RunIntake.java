@@ -7,7 +7,6 @@ import frc.robot.subsystems.Intake;
 public class RunIntake extends CommandBase {
   public final Intake intake;
   public double speed;
-  //public boolean holdIntake = false;
 
   public RunIntake(Intake intake, double speed) {
     this.intake = intake;
@@ -24,25 +23,11 @@ public class RunIntake extends CommandBase {
   @Override
   public void execute() {
     intake.intakeSpeed(speed);
-    /*if(holdIntake == false) {
-      intake.intakeRotationSpeed(1);
-    }else{
-      intake.intakeRotationSpeed(0.5);
-    }*/
-
-    /*if(intake.intakeRotationCurrent() > 20) {
-      holdIntake = true;
-    }*/
-
-    /*if(Math.abs(intake.getIntakeRotationSpeed()) < 1) {
-      holdIntake = true;
-    }*/
   }
 
   @Override
   public void end(boolean interrupted) {
     intake.intakeStop();
-    //intake.intakeRotationStop();
     SmartDashboard.putBoolean("RunIntake", false);
   }
 

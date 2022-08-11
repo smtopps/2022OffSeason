@@ -5,7 +5,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 
 public class DissableCompressor extends CommandBase {
-  Climber climber;
+  private final Climber climber;
 
   public DissableCompressor(Climber climber) {
     this.climber = climber;

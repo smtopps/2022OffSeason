@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveBase;
 
 public class TurnByAngleBasic extends CommandBase {
-  DriveBase driveBase;
-  double angle;
-  double distance;
-  double maxSpeed;
+  private final DriveBase driveBase;
+  private final double angle;
+  private double distance;
+  private final double maxSpeed;
 
   public TurnByAngleBasic(DriveBase driveBase, double angle, double maxSpeed) {
     this.driveBase = driveBase;

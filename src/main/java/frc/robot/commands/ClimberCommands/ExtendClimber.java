@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ExtendClimber extends CommandBase {
-  public double Setpoint;
+  public final double Setpoint;
   public final Climber climber;
 
   public ExtendClimber(Climber climber, double Setpoint) {

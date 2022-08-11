@@ -9,20 +9,20 @@ import frc.robot.RobotContainer;
 
 public class EnableLimelight extends CommandBase {
   /** Creates a new ToggleShooterIdle. */
-  int Toggle;
-  public EnableLimelight(int OneFalseTwoTrueThreeToggle) {
-    this.Toggle = OneFalseTwoTrueThreeToggle;
+  private final LimelightState limelightState;
+  public EnableLimelight(LimelightState limelightState) {
+    this.limelightState = limelightState;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(Toggle == 3) {
+    if(limelightState == LimelightState.TOGGLE) {
       RobotContainer.enableLimelight = !RobotContainer.enableLimelight;
-    }else if(Toggle == 1) {
+    }else if(limelightState == LimelightState.DISSABLED) {
       RobotContainer.enableLimelight = false;
-    }else if(Toggle == 2) {
+    }else if(limelightState == LimelightState.ENABLED) {
       RobotContainer.enableLimelight = true;
     }
     //SmartDashboard.putBoolean("Enable Limelight", RobotContainer.enableLimelight);
@@ -40,5 +40,9 @@ public class EnableLimelight extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
+  }
+
+  public enum LimelightState {
+    DISSABLED, ENABLED, TOGGLE
   }
 }

@@ -4,22 +4,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class ToggleIntake extends CommandBase {
-  public final Intake intake;
-  public int OneRaiseTwoLowThreeToggle;
+  private final Intake intake;
+  private final IntakePosition intakePosition;
 
-  public ToggleIntake(Intake intake, int OneRaiseTwoLowThreeToggle) {
+  public ToggleIntake(Intake intake, IntakePosition intakePosition) {
     this.intake = intake;
-    this.OneRaiseTwoLowThreeToggle = OneRaiseTwoLowThreeToggle;
+    this.intakePosition = intakePosition;
     addRequirements(intake);
   }
 
   @Override
   public void initialize() {
-    if(OneRaiseTwoLowThreeToggle == 3) {
+    if(intakePosition == IntakePosition.TOGGLE) {
       intake.intakeTogglePosition();
-    }else if(OneRaiseTwoLowThreeToggle == 2) {
+    }else if(intakePosition == IntakePosition.LOWERED) {
       intake.intakeSetPosition(true);
-    }else if(OneRaiseTwoLowThreeToggle == 1) {
+    }else if(intakePosition == IntakePosition.RAISED) {
       intake.intakeSetPosition(false);
     }
   }
@@ -33,5 +33,9 @@ public class ToggleIntake extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
+  }
+
+  public enum IntakePosition {
+    RAISED, LOWERED, TOGGLE
   }
 }

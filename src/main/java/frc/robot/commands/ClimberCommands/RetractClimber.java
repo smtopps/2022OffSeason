@@ -1,13 +1,13 @@
 package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 
 public class RetractClimber extends CommandBase {
-  public final Climber climber;
+  private final Climber climber;
+  private boolean firstPass = true;
 
   public RetractClimber(Climber climber) {
     this.climber = climber;
@@ -15,7 +15,9 @@ public class RetractClimber extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    firstPass = true;
+  }
 
   @Override
   public void execute() {
@@ -33,13 +35,15 @@ public class RetractClimber extends CommandBase {
     climber.resetEncoders();
     climber.leftClimberStop();
     climber.rightClimberStop();
-    ClimbToTopGroup.ClimberBar ++;
-    SmartDashboard.putNumber("Climber Bar", ClimbToTopGroup.ClimberBar);
+    firstPass = true; 
   }
 
   @Override
   public boolean isFinished() {
-    Timer.delay(0.05);
+    if(firstPass == true) {
+      Timer.delay(0.05);
+      firstPass = false;
+    }
     if (Math.abs(climber.leftClimberVelocity()) < 1 && Math.abs(climber.rightClimberVelocity()) < 1) {
       return true;
     }else{

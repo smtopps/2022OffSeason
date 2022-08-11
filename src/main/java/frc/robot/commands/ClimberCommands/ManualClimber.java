@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ManualClimber extends CommandBase {
-  Climber climber;
-  DoubleSupplier leftYJoystick;
+  private final Climber climber;
+  private DoubleSupplier leftYJoystick;
 
   public ManualClimber(Climber climber, DoubleSupplier leftYJoystick) {
     this.climber = climber;
@@ -21,8 +21,8 @@ public class ManualClimber extends CommandBase {
 
   @Override
   public void execute() {
-    climber.leftClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.02)*-10);
-    climber.rightClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.02)*-10);
+    climber.leftClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.1)*-10);
+    climber.rightClimberSpeed(MathUtil.applyDeadband(leftYJoystick.getAsDouble(), 0.1)*-10);
   }
 
   @Override

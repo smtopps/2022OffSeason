@@ -14,17 +14,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  private final WPI_TalonSRX INTAKE_MOTOR;
-  private final CANSparkMax INTAKE_ROTATION_MOTOR = new CANSparkMax(Constants.INTAKE_ROTATION_ID, MotorType.kBrushless);
-  private final Solenoid INTAKE_CYLINDER;
-  private final RelativeEncoder INTAKE_ROTATION_ENCODER = INTAKE_ROTATION_MOTOR.getEncoder();
+  private final WPI_TalonSRX intakeRollerMotor = new WPI_TalonSRX(Constants.INTAKE_ID);
+  private final CANSparkMax intakeRotationMotor = new CANSparkMax(Constants.INTAKE_ROTATION_ID, MotorType.kBrushless);
+  private final Solenoid intakeRotationSolenoid = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_CHANNEL);
+  private final RelativeEncoder intakeRotationEncoder = intakeRotationMotor.getEncoder();
 
   public Intake() {
-    INTAKE_MOTOR = new WPI_TalonSRX(Constants.INTAKE_ID);
-    INTAKE_MOTOR.setNeutralMode(NeutralMode.Coast);
-    INTAKE_ROTATION_MOTOR.setIdleMode(IdleMode.kCoast);
-    INTAKE_CYLINDER = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.INTAKE_POSITION);
-    INTAKE_ROTATION_MOTOR.setSmartCurrentLimit(20, 20);
+    intakeRollerMotor.setNeutralMode(NeutralMode.Coast);
+    intakeRollerMotor.configOpenloopRamp(0.5);
+    intakeRollerMotor.configClosedloopRamp(0.5);
+    intakeRotationMotor.setIdleMode(IdleMode.kCoast);
+    intakeRotationMotor.setSmartCurrentLimit(20, 20);
 
   }
 
@@ -32,42 +32,42 @@ public class Intake extends SubsystemBase {
   public void periodic() {}
 
   public void intakeSpeed(double speed) {
-    INTAKE_MOTOR.set(ControlMode.PercentOutput, speed);
+    intakeRollerMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void intakeSetPosition(boolean position) {
-    INTAKE_CYLINDER.set(position);
+    intakeRotationSolenoid.set(position);
   }
 
   public void intakeTogglePosition() {
-    INTAKE_CYLINDER.toggle();
+    intakeRotationSolenoid.toggle();
   }
 
   public void intakeStop() {
-    INTAKE_MOTOR.stopMotor();
+    intakeRollerMotor.stopMotor();
   }
 
   public void intakeRotationSpeed(double voltage) {
-    INTAKE_ROTATION_MOTOR.setVoltage(voltage);
+    intakeRotationMotor.setVoltage(voltage);
   }
 
   public void intakeRotationStop() {
-    INTAKE_ROTATION_MOTOR.stopMotor();
+    intakeRotationMotor.stopMotor();
   }
 
   public double intakeRotationCurrent() {
-    return INTAKE_ROTATION_MOTOR.getOutputCurrent();
+    return intakeRotationMotor.getOutputCurrent();
   }
 
   public double getIntakeRotationSpeed() {
-    return INTAKE_ROTATION_ENCODER.getVelocity();
+    return intakeRotationEncoder.getVelocity();
   }
 
   public double getIntakeRotationPosition() {
-    return INTAKE_ROTATION_ENCODER.getPosition();
+    return intakeRotationEncoder.getPosition();
   }
 
   public void setIntakeRotationPosition(double position) {
-    INTAKE_ROTATION_ENCODER.setPosition(position);
+    intakeRotationEncoder.setPosition(position);
   }
 }

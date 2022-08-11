@@ -49,8 +49,6 @@ public class AlignTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    //turret.centerTurretEncoder();
-    //turret.centerTurretLimitSwitch();
     turret.stopTurret();
     SmartDashboard.putBoolean("Turret Aligned", false);
     TurretAligned = false;

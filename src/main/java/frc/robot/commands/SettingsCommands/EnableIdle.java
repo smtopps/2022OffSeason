@@ -9,20 +9,20 @@ import frc.robot.RobotContainer;
 
 public class EnableIdle extends CommandBase {
   /** Creates a new ToggleShootOponentBalls. */
-  int Toggle;
-  public EnableIdle(int OneFalseTwoTrueThreeToggle) {
-    this.Toggle = OneFalseTwoTrueThreeToggle;
+  private final IdleState idleState;
+  public EnableIdle(IdleState idleState) {
+    this.idleState = idleState;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(Toggle == 3) {
+    if(idleState == IdleState.TOGGLE) {
       RobotContainer.enableIdle = !RobotContainer.enableIdle;
-    }else if(Toggle == 1) {
+    }else if(idleState == IdleState.DISSABLED) {
       RobotContainer.enableIdle = false;
-    }else if(Toggle == 2) {
+    }else if(idleState == IdleState.ENABLED) {
       RobotContainer.enableIdle = true;
     }
     //SmartDashboard.putBoolean("Enable Idle", RobotContainer.enableIdle);
@@ -40,5 +40,9 @@ public class EnableIdle extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
+  }
+
+  public enum IdleState {
+    DISSABLED, ENABLED, TOGGLE
   }
 }

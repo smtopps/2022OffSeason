@@ -27,7 +27,6 @@ public class TuneShooter extends CommandBase {
     limelight.setLEDMode(3);
     limelight.setCameraMode(0);
     limelight.setStream(1);
-    shooter.setRampRate(0.5);
   }
 
   @Override

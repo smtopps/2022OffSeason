@@ -9,20 +9,20 @@ import frc.robot.RobotContainer;
 
 public class EnableColorSensor extends CommandBase {
   /** Creates a new ToggleGrabOponentBalls. */
-  int Toggle;
-  public EnableColorSensor(int OneFalseTwoTrueThreeToggle) {
-    this.Toggle = OneFalseTwoTrueThreeToggle;
+  private final ColorSensorState colorSensorState;
+  public EnableColorSensor(ColorSensorState colorSensorState) {
+    this.colorSensorState = colorSensorState;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(Toggle == 3) {
+    if(colorSensorState == ColorSensorState.TOGGLE) {
       RobotContainer.enableColorSensor = !RobotContainer.enableColorSensor;
-    }else if(Toggle == 1) {
+    }else if(colorSensorState == ColorSensorState.DISSABLED) {
       RobotContainer.enableColorSensor = false;
-    }else if(Toggle == 2) {
+    }else if(colorSensorState == ColorSensorState.ENABLED) {
       RobotContainer.enableColorSensor = true;
     }
     //SmartDashboard.putBoolean("Enable Color Sensor", RobotContainer.enableColorSensor);
@@ -40,5 +40,9 @@ public class EnableColorSensor extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
+  }
+
+  public enum ColorSensorState {
+    ENABLED, DISSABLED, TOGGLE
   }
 }

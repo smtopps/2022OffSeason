@@ -28,9 +28,7 @@ public class DriveBase extends SubsystemBase {
   private final WPI_TalonFX leftFollower = new WPI_TalonFX(Constants.LEFT_FOLLOW_ID);
   private final WPI_TalonFX rightLeader = new WPI_TalonFX(Constants.RIGHT_LEADER_ID);
   private final WPI_TalonFX rightFollower = new WPI_TalonFX(Constants.RIGHT_FOLLOW_ID);
-  private final DifferentialDrive DRIVE = new DifferentialDrive(leftLeader, rightLeader);
-  double throttle;
-  double rotation;
+  private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
   private final Field2d field2d = new Field2d();
 
   private final DifferentialDriveOdometry odometry;
@@ -42,11 +40,6 @@ public class DriveBase extends SubsystemBase {
   NetworkTableEntry rightMeasurement = table.getEntry("right_measurement");
 
   public DriveBase() {
-    //leftLeader = new WPI_TalonFX(Constants.LEFT_LEADER_ID);
-    //LEFT_FOLLOW = new WPI_TalonFX(Constants.LEFT_FOLLOW_ID);
-    //RIGHT_LEADER = new WPI_TalonFX(Constants.RIGHT_LEADER_ID);
-    //RIGHT_FOLLOW = new WPI_TalonFX(Constants.RIGHT_FOLLOW_ID);
-
     leftLeader.configFactoryDefault();
     leftFollower.configFactoryDefault();
     rightLeader.configFactoryDefault();
@@ -63,9 +56,8 @@ public class DriveBase extends SubsystemBase {
     rightLeader.setInverted(true);
     rightFollower.setInverted(true);
 
-    DRIVE.setDeadband(0.02);
+    differentialDrive.setDeadband(0.02);
 
-    //DRIVE = new DifferentialDrive(leftLeader, RIGHT_LEADER);
     odometry = new DifferentialDriveOdometry(Pigeon2Subsystem.getGyroscopeRotation());
   }
 
@@ -83,22 +75,22 @@ public class DriveBase extends SubsystemBase {
   }
 
   public void arcadedrive(double throttle, double rotation, boolean squared) {
-    DRIVE.arcadeDrive(
+    differentialDrive.arcadeDrive(
       -throttle, 
       rotation, 
       squared);
   }
 
   public void autoArcadedrive(double throttle, double rotation) {
-    DRIVE.arcadeDrive(throttle, rotation, false);
+    differentialDrive.arcadeDrive(throttle, rotation, false);
   }
 
   public void autoArcadeStop() {
-    DRIVE.stopMotor();
+    differentialDrive.stopMotor();
   }
 
   public void setDeadband(double deadband) {
-    DRIVE.setDeadband(deadband);
+    differentialDrive.setDeadband(deadband);
   }
 
   private double nativeUnitsToDistanceMeters(double sensorCounts){
@@ -154,12 +146,11 @@ public class DriveBase extends SubsystemBase {
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftLeader.setVoltage(leftVolts);
     rightLeader.setVoltage(rightVolts);
-    DRIVE.feed();
+    differentialDrive.feed();
   }
 
   public Command createCommandForTrajectory(Trajectory trajectory) {
     RamseteController ramseteController = new RamseteController();
-    ramseteController.setEnabled(true);
 
     PIDController leftController = new PIDController(AutoConstants.kPLeftController, 0, 0);
     PIDController rightController = new PIDController(AutoConstants.kPRightController, 0, 0);

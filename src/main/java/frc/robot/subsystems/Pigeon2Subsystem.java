@@ -48,7 +48,7 @@ public class Pigeon2Subsystem extends SubsystemBase {
     return m_pigeon2.getRoll();
   }
 
-public int getRobotAngle() {
+  public int getRobotAngle() {
     return 0;
-}
+  }
 }

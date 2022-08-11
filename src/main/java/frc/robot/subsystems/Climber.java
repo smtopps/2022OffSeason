@@ -12,29 +12,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  CANSparkMax CLIMBER_LEFT_MOTOR;
-  CANSparkMax CLIMBER_RIGHT_MOTOR;
-  RelativeEncoder CLIMBER_LEFT_ENCODER;
-  RelativeEncoder CLIMBER_RIGHT_ENCODER;
-  Solenoid CLIMBER_SOLINOID;
-  public static final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
+  private final CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR_ID, MotorType.kBrushless);
+  private final CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR_ID, MotorType.kBrushless);
+  private final RelativeEncoder leftClimberEncoder = leftClimberMotor.getEncoder();
+  private final RelativeEncoder rightClimberEncoder = rightClimberMotor.getEncoder();
+  private final Solenoid climberSolenoid = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, 14);
+  private final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
   public Climber() {
-    CLIMBER_SOLINOID = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, 14);
-    CLIMBER_LEFT_MOTOR = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR_ID, MotorType.kBrushless);
-    CLIMBER_RIGHT_MOTOR = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR_ID, MotorType.kBrushless);
+    leftClimberMotor.restoreFactoryDefaults();
+    rightClimberMotor.restoreFactoryDefaults();
+    leftClimberMotor.setIdleMode(IdleMode.kBrake);
+    rightClimberMotor.setIdleMode(IdleMode.kBrake);
+    leftClimberMotor.setSmartCurrentLimit(80);
+    rightClimberMotor.setSmartCurrentLimit(80);
 
-    CLIMBER_LEFT_MOTOR.restoreFactoryDefaults();
-    CLIMBER_RIGHT_MOTOR.restoreFactoryDefaults();
-    CLIMBER_LEFT_MOTOR.setIdleMode(IdleMode.kBrake);
-    CLIMBER_RIGHT_MOTOR.setIdleMode(IdleMode.kBrake);
-    //CLIMBER_LEFT_MOTOR.setSmartCurrentLimit(40);
-    //CLIMBER_RIGHT_MOTOR.setSmartCurrentLimit(40);
-
-    CLIMBER_LEFT_MOTOR.setInverted(false);
-    CLIMBER_RIGHT_MOTOR.setInverted(true);
-
-    CLIMBER_LEFT_ENCODER = CLIMBER_LEFT_MOTOR.getEncoder();
-    CLIMBER_RIGHT_ENCODER = CLIMBER_RIGHT_MOTOR.getEncoder();
+    leftClimberMotor.setInverted(false);
+    rightClimberMotor.setInverted(true);
   }
 
   @Override
@@ -44,60 +37,60 @@ public class Climber extends SubsystemBase {
   }
 
   public void leftClimberSpeed(double voltage) {
-    CLIMBER_LEFT_MOTOR.setVoltage(voltage);
+    leftClimberMotor.setVoltage(voltage);
   }
 
   public void rightClimberSpeed(double voltage) {
-    CLIMBER_RIGHT_MOTOR.setVoltage(voltage);
+    rightClimberMotor.setVoltage(voltage);
   }
 
   public double leftClimberEncoder() {
-    return CLIMBER_LEFT_ENCODER.getPosition();
+    return leftClimberEncoder.getPosition();
   }
 
   public double rightClimberEncoder() {
-    return CLIMBER_RIGHT_ENCODER.getPosition();
+    return rightClimberEncoder.getPosition();
   }
 
   public double leftClimberCurrent() {
-    return CLIMBER_LEFT_MOTOR.getOutputCurrent();
+    return leftClimberMotor.getOutputCurrent();
   }
 
   public double rightClimberCurrent() {
-    return CLIMBER_RIGHT_MOTOR.getOutputCurrent();
+    return rightClimberMotor.getOutputCurrent();
   }
 
   public double leftClimberVelocity() {
-    return CLIMBER_LEFT_ENCODER.getVelocity();
+    return leftClimberEncoder.getVelocity();
   }
 
   public double rightClimberVelocity() {
-    return CLIMBER_RIGHT_ENCODER.getVelocity();
+    return rightClimberEncoder.getVelocity();
   }
 
   public void leftClimberStop() {
-    CLIMBER_LEFT_MOTOR.stopMotor();
+    leftClimberMotor.stopMotor();
   }
 
   public void rightClimberStop() {
-    CLIMBER_RIGHT_MOTOR.stopMotor();
+    rightClimberMotor.stopMotor();
   }
 
   public void angleClimberDown() {
-    CLIMBER_SOLINOID.set(true);
+    climberSolenoid.set(true);
   }
 
   public void angleClimberUp() {
-    CLIMBER_SOLINOID.set(false);
+    climberSolenoid.set(false);
   }
 
   public void toggleClimber() {
-    CLIMBER_SOLINOID.toggle();
+    climberSolenoid.toggle();
   }
 
   public void resetEncoders() {
-    CLIMBER_LEFT_ENCODER.setPosition(0);
-    CLIMBER_RIGHT_ENCODER.setPosition(0);
+    leftClimberEncoder.setPosition(0);
+    rightClimberEncoder.setPosition(0);
   }
   
   public void compressorDisable() {

@@ -7,8 +7,8 @@ import frc.robot.subsystems.DriveBase;
 
 public class DriveWithJoystick extends CommandBase {
   private final DriveBase driveBase;
-  private final DoubleSupplier throttle;
-  private final DoubleSupplier rotation;
+  private DoubleSupplier throttle;
+  private DoubleSupplier rotation;
 
   public DriveWithJoystick(DriveBase driveBase, DoubleSupplier throttle, DoubleSupplier rotation) {
     this.driveBase = driveBase;

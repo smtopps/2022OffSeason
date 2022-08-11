@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveBase;
 
 public class DriveByDistanceBasic extends CommandBase {
-  DriveBase driveBase;
-  double distance;
-  double maxSpeed;
+  private final DriveBase driveBase;
+  private final double distance;
+  private final double maxSpeed;
 
   public DriveByDistanceBasic(DriveBase driveBase, double distance, double maxSpeed) {
     this.driveBase = driveBase;
