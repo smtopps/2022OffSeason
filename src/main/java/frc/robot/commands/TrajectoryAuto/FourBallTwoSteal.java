@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.IntakeCommands.RunIntake;
+import frc.robot.commands.IntakeCommands.IntakePositionPID;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
 import frc.robot.commands.SettingsCommands.EnableColorSensor.ColorSensorState;
 import frc.robot.commands.ShooterCommands.LowGoalShoot;
@@ -41,24 +41,24 @@ public class FourBallTwoSteal extends SequentialCommandGroup {
       new EnableColorSensor(ColorSensorState.DISSABLED),
       new ResetOdometry(driveBase, trajectory1),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory1)
       ),
       new ShootBalls(shooter, turret, limelight, feeder),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory2)
       ),
       new LowGoalShoot(feeder, shooter, limelight),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory3)
       ),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         new WaitCommand(2)
       ),

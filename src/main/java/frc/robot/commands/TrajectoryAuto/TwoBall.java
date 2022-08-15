@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.IntakeCommands.RunIntake;
+import frc.robot.commands.IntakeCommands.IntakePositionPID;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
 import frc.robot.commands.SettingsCommands.EnableColorSensor.ColorSensorState;
 import frc.robot.commands.ShooterCommands.ShootBalls;
@@ -37,7 +37,7 @@ public class TwoBall extends SequentialCommandGroup {
       new EnableColorSensor(ColorSensorState.DISSABLED),
       new ResetOdometry(driveBase, trajectory1),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory1)
       ),

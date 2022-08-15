@@ -32,7 +32,7 @@ public final class Constants {
 
     //Intake Motor ID and information
     public static final int INTAKE_ID = 28;
-    public static final int INTAKE_ROTATION_ID = 0;
+    public static final int INTAKE_ROTATION_ID = 50;
     public static final int INTAKE_CHANNEL = 8;
     public static final double MAX_SPEED_DRIVE_INTAKE = 0.2;
     public static final double INTAKE_SPEED = 0.8;

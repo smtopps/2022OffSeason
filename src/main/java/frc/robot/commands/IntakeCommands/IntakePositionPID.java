@@ -10,13 +10,11 @@ import frc.robot.subsystems.Intake;
 
 public class IntakePositionPID extends CommandBase {
   Intake intake;
-  PIDController positionController = new PIDController(0.0001, 0, 0);
-  double setpoint = 0;
-  boolean runIntake;
+  PIDController positionController = new PIDController(0.35, 0, 0);
+  double setpoint =-11.6;
   /** Creates a new IntakePositionPID. */
-  public IntakePositionPID(Intake intake, boolean runIntake) {
+  public IntakePositionPID(Intake intake) {
     this.intake = intake;
-    this.runIntake = runIntake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }
@@ -24,22 +22,15 @@ public class IntakePositionPID extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    positionController.setTolerance(1);
+    //positionController.setTolerance(0.05);
+    positionController.setSetpoint(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double setpoint;
-    if(runIntake){
-      setpoint = 100;
-      intake.intakeSpeed(1);
-    }else{
-      setpoint = 0;
-      intake.intakeStop();
-    }
-    positionController.setSetpoint(setpoint);
     intake.intakeRotationSpeed(positionController.calculate(intake.getIntakeRotationPosition()));
+    intake.intakeSpeed(0.7);
   }
 
   // Called once the command ends or is interrupted.

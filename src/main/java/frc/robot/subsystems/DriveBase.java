@@ -33,11 +33,11 @@ public class DriveBase extends SubsystemBase {
 
   private final DifferentialDriveOdometry odometry;
 
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("troubleshooting");
-  NetworkTableEntry leftReference = table.getEntry("left_reference");
-  NetworkTableEntry leftMeasurement = table.getEntry("left_measurement");
-  NetworkTableEntry rightReference = table.getEntry("right_reference");
-  NetworkTableEntry rightMeasurement = table.getEntry("right_measurement");
+  //NetworkTable table = NetworkTableInstance.getDefault().getTable("troubleshooting");
+  //NetworkTableEntry leftReference = table.getEntry("left_reference");
+  //NetworkTableEntry leftMeasurement = table.getEntry("left_measurement");
+  //NetworkTableEntry rightReference = table.getEntry("right_reference");
+  //NetworkTableEntry rightMeasurement = table.getEntry("right_measurement");
 
   public DriveBase() {
     leftLeader.configFactoryDefault();
@@ -63,10 +63,10 @@ public class DriveBase extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Encoder Distance", getLeftEncoderDistance());
-    SmartDashboard.putNumber("Right Encoder Distance", getRightEncoderDistance());
-    SmartDashboard.putNumber("Left Encoder Speed", getLeftEncoderSpeed());
-    SmartDashboard.putNumber("Right Encoder Speed", getRightEncoderSpeed());
+    //SmartDashboard.putNumber("Left Encoder Distance", getLeftEncoderDistance());
+    //SmartDashboard.putNumber("Right Encoder Distance", getRightEncoderDistance());
+    //SmartDashboard.putNumber("Left Encoder Speed", getLeftEncoderSpeed());
+    //SmartDashboard.putNumber("Right Encoder Speed", getRightEncoderSpeed());
     SmartDashboard.putString("Pose", getPose().toString());
     SmartDashboard.putData("Field", field2d);
     field2d.setRobotPose(odometry.getPoseMeters());
@@ -95,7 +95,7 @@ public class DriveBase extends SubsystemBase {
 
   private double nativeUnitsToDistanceMeters(double sensorCounts){
     double kCountsPerRev = 2048;
-    double kGearRatio = (50/14)*(48/16);//10.71428571428571;
+    double kGearRatio = (50.0/14.0)*(48.0/16.0);//10.71428571428571; added .0 to the end of all values to insure no integer division issues.
     double kWheelRadiusInches = 5.6/2;
 		double motorRotations = (double)sensorCounts / kCountsPerRev;
 		double wheelRotations = motorRotations / kGearRatio;
@@ -164,15 +164,17 @@ public class DriveBase extends SubsystemBase {
       this::getWheelSpeeds, 
       leftController,
       rightController,
-      (leftVolts, rightVolts) -> {
+      this::tankDriveVolts,
+      /*(leftVolts, rightVolts) -> {
         this.tankDriveVolts(leftVolts, rightVolts);
 
         leftMeasurement.setNumber(this.getWheelSpeeds().leftMetersPerSecond);
         leftReference.setNumber(leftController.getSetpoint());
 
         rightMeasurement.setNumber(this.getWheelSpeeds().rightMetersPerSecond);
-        rightReference.setNumber(rightController.getSetpoint());
-      }, 
+        rightReference.setNumber(rightController.getSetpoint()
+        );
+      },*/
       this
     );
 

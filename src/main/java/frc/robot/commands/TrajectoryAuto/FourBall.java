@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
-import frc.robot.commands.IntakeCommands.RunIntake;
-import frc.robot.commands.IntakeCommands.ToggleIntake;
-import frc.robot.commands.IntakeCommands.ToggleIntake.IntakePosition;
+import frc.robot.commands.IntakeCommands.IntakePositionPID;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
 import frc.robot.commands.SettingsCommands.EnableColorSensor.ColorSensorState;
 import frc.robot.commands.ShooterCommands.ShootBalls;
@@ -31,33 +29,29 @@ import frc.robot.subsystems.Turret;
 public class FourBall extends SequentialCommandGroup {
   /** Creates a new BasicTest. */
   public FourBall(DriveBase driveBase, Intake intake, Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, Pigeon2Subsystem pigeon2Subsystem, double waitTime) {
-    Trajectory trajectory1 = PathPlanner.loadPath("4BallPt1", 2, 3, false);
-    Trajectory trajectory2 = PathPlanner.loadPath("4BallPt2", 3, 3, false);
-    Trajectory trajectory3 = PathPlanner.loadPath("4BallPt3", 3, 3, true);
+    Trajectory trajectory1 = PathPlanner.loadPath("4BallPt1", 1.5, 2, false);
+    Trajectory trajectory2 = PathPlanner.loadPath("4BallPt2", 1.5, 2, false);
+    Trajectory trajectory3 = PathPlanner.loadPath("4BallPt3", 1.5, 2, true);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(waitTime),
       new EnableColorSensor(ColorSensorState.DISSABLED),
       new ResetOdometry(driveBase, trajectory1),
-      new ToggleIntake(intake, IntakePosition.LOWERED),
-      new WaitCommand(0.5),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory1)
       ),
-      new WaitCommand(0.5),
       new ShootBalls(shooter, turret, limelight, feeder),
       new ParallelRaceGroup(
-        new RunIntake(intake, 0.7),
+        new IntakePositionPID(intake),
         new PrepareBallsInFeeder(feeder),
         new SequentialCommandGroup(
           driveBase.createCommandForTrajectory(trajectory2),
           new WaitCommand(2)
         )
       ),
-      new ToggleIntake(intake, IntakePosition.RAISED),
       driveBase.createCommandForTrajectory(trajectory3),
       new ShootBalls(shooter, turret, limelight, feeder),
       new EnableColorSensor(ColorSensorState.ENABLED)

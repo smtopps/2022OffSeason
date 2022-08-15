@@ -53,15 +53,15 @@ public class RevShooter extends CommandBase {
 
     if(limelight.getTV() == 0){
       RPM = 1900;
-      System.out.println("does not see target");
+      //System.out.println("does not see target");
     }else if(limelight.getTV() == 1 && hoodPosition == false && Delay == 0){
       RPM = (2421+(-57.7*limelight.getTY())+(1.57*(Math.pow(limelight.getTY(), 2))));
-      System.out.println("hood in low position");
+      //System.out.println("hood in low position");
     }else if(limelight.getTV() == 1 && hoodPosition == true && Delay == 0){
       RPM = (20+2435+(-67.2*limelight.getTY())+(1.99*(Math.pow(limelight.getTY(), 2))));
-      System.out.println("hood in high position");
+      //System.out.println("hood in high position");
     }else{
-      System.out.println("issue");
+      //System.out.println("issue");
     }
 
     shooter.setFlywheelRPM(-RPM);

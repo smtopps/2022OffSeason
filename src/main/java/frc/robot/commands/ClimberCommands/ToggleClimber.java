@@ -5,15 +5,23 @@ import frc.robot.subsystems.Climber;
 
 public class ToggleClimber extends CommandBase {
   private final Climber climber;
+  private final ClimberState climberState;
 
-  public ToggleClimber(Climber climber) {
+  public ToggleClimber(Climber climber, ClimberState climberState) {
     this.climber = climber;
+    this.climberState = climberState;
     addRequirements(climber);
   }
 
   @Override
   public void initialize() {
-    climber.toggleClimber();
+    if(climberState == ClimberState.TOGGLE) {
+      climber.toggleClimber();
+    }else if(climberState == ClimberState.DOWN) {
+      climber.angleClimberDown();
+    }else if(climberState == ClimberState.UP) {
+      climber.angleClimberUp();
+    }
   }
 
   @Override
@@ -25,5 +33,9 @@ public class ToggleClimber extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
+  }
+
+  public enum ClimberState {
+    UP, DOWN, TOGGLE
   }
 }

@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,16 +17,17 @@ public class Feeder extends SubsystemBase {
 
   public Feeder() {
     indexerMotor.setIdleMode(IdleMode.kBrake);
+    indexerMotor.setSmartCurrentLimit(80);
     indexerMotor.setClosedLoopRampRate(0.5);
     indexerMotor.setOpenLoopRampRate(0.5);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Feeder Proximity", indexerColorSensor.getProximity());
-    SmartDashboard.putNumber("Feeder Red", indexerColorSensor.getRed());
-    SmartDashboard.putNumber("Feeder Blue", indexerColorSensor.getBlue());
-    SmartDashboard.putNumber("Feeder Green", indexerColorSensor.getGreen());
+    //SmartDashboard.putNumber("Feeder Proximity", indexerColorSensor.getProximity());
+    //SmartDashboard.putNumber("Feeder Red", indexerColorSensor.getRed());
+    //SmartDashboard.putNumber("Feeder Blue", indexerColorSensor.getBlue());
+    //SmartDashboard.putNumber("Feeder Green", indexerColorSensor.getGreen());
     color = DriverStation.getAlliance();
   }
 

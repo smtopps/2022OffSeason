@@ -15,8 +15,11 @@ import frc.robot.commands.ClimberCommands.ManualClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.RetractClimberGroup;
 import frc.robot.commands.ClimberCommands.ToggleClimber;
-import frc.robot.commands.IntakeCommands.RunIntake;
+import frc.robot.commands.ClimberCommands.ToggleClimber.ClimberState;
+import frc.robot.commands.IntakeCommands.IntakePositionPID;
+import frc.robot.commands.IntakeCommands.RetractIntakeCurrent;
 import frc.robot.commands.IntakeCommands.ToggleIntake;
+import frc.robot.commands.IntakeCommands.RetractIntakeCurrent.State;
 import frc.robot.commands.IntakeCommands.ToggleIntake.IntakePosition;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
 import frc.robot.commands.SettingsCommands.EnableIdle;
@@ -75,8 +78,8 @@ public class RobotContainer {
     turret.setDefaultCommand(new ManualTurretControl(turret, () -> operatorController.getRightX()));
     climber.setDefaultCommand(new ManualClimber(climber, () -> operatorController.getLeftY()));
     feeder.setDefaultCommand(new PrepareBallsInFeeder(feeder));
-    shooter.setDefaultCommand(new IdleShooter(shooter, limelight));
-    //intake.setDefaultCommand(new RetractIntakeCurrent(intake, State.RETRACTING));
+    //shooter.setDefaultCommand(new IdleShooter(shooter, limelight));
+    intake.setDefaultCommand(new RetractIntakeCurrent(intake, State.RETRACTING));
     
     configureButtonBindings();
 
@@ -92,10 +95,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, 0.7)); //was 0.8
-    //new JoystickButton(driverController, 6).whileHeld(new RetractIntakeCurrent(intake, State.INTAKE));
-    //new TriggerRButton().whileHeld(new RetractIntakeCurrent(intake, State.RIVERSING));
-    new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake, IntakePosition.TOGGLE));
+    new JoystickButton(driverController, 6).whileHeld(new IntakePositionPID(intake));
     new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder));
     new JoystickButton(driverController, 2).whenHeld(new LowGoalShoot(feeder, shooter, limelight));
 
@@ -103,7 +103,7 @@ public class RobotContainer {
     new POVButton(operatorController, 270).whenPressed(new BarToBarGoup(climber));
     new POVButton(operatorController, 180).whenPressed(new RetractClimber(climber));
     new POVButton(operatorController, 90).whenPressed(new RetractClimberGroup(climber));
-    new JoystickButton(operatorController, 6).whenPressed(new ToggleClimber(climber));
+    new JoystickButton(operatorController, 6).whenPressed(new ToggleClimber(climber, ClimberState.TOGGLE));
 
     new JoystickButton(operatorController, 7).whenPressed(new ResetTurretEncoder(turret));
     new JoystickButton(operatorController, 1).whenPressed(new EnableColorSensor(ColorSensorState.TOGGLE));
