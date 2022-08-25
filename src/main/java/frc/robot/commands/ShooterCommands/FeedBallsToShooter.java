@@ -85,7 +85,7 @@ public class FeedBallsToShooter extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(counter < 50*2.5){
+    if(counter < 50*1.0){ //was 2.5 seconds
       return false;
     }else{
       return true;

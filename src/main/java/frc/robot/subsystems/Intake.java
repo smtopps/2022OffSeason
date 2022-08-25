@@ -25,15 +25,20 @@ public class Intake extends SubsystemBase {
     intakeRollerMotor.configOpenloopRamp(0.5);
     intakeRollerMotor.configClosedloopRamp(0.5);
     intakeRollerMotor.enableCurrentLimit(true);
-    intakeRollerMotor.configContinuousCurrentLimit(20);
-    intakeRotationMotor.setIdleMode(IdleMode.kCoast);
-    intakeRotationMotor.setSmartCurrentLimit(30);
+    intakeRollerMotor.configContinuousCurrentLimit(35);
+    intakeRollerMotor.clearStickyFaults();
+    intakeRotationMotor.setIdleMode(IdleMode.kBrake);
+    intakeRotationMotor.setSmartCurrentLimit(25);
     intakeRotationMotor.enableVoltageCompensation(10);
+    intakeRotationMotor.clearFaults();
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Encoder", getIntakeRotationPosition());
+    //SmartDashboard.putNumber("Intake Roller Supply Current", intakeRollerMotor.getSupplyCurrent());
+    SmartDashboard.putNumber("Intake Rotation Current", intakeRotationMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Intake Rotation Velocity", intakeRotationEncoder.getVelocity());
   }
 
   public void intakeSpeed(double speed) {

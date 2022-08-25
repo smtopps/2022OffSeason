@@ -2,44 +2,46 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ShooterCommands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
 
-public class LowGoalFeeder extends CommandBase {
-  private final Feeder feeder;
-  private double initialTime;
-  /** Creates a new LowGoalFeeder. */
-  public LowGoalFeeder(Feeder feeder) {
-    this.feeder = feeder;
+public class ZeroIntake extends CommandBase {
+  private final Intake intake;
+  private double initalTime;
+  /** Creates a new ZeroIntake. */
+  public ZeroIntake(Intake intake) {
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(feeder);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialTime = Timer.getFPGATimestamp();
+    initalTime = Timer.getFPGATimestamp();
+    //intake.setIntakeRotationPosition(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    feeder.feederSpeed(-8);
+    intake.intakeRotationSpeed(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    feeder.feederStop();
+    intake.setIntakeRotationPosition(0);
+    intake.intakeRotationStop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp()-initialTime >= 2.5) {
+    if(Timer.getFPGATimestamp()-initalTime >= 0.5) {
       return true;
     }else{
       return false;

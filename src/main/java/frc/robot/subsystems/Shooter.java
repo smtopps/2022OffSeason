@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -31,6 +30,9 @@ public class Shooter extends SubsystemBase {
     leftShooterMotor.enableVoltageCompensation(11);
     rightShooterMotor.enableVoltageCompensation(11);
 
+    leftShooterMotor.clearFaults();
+    rightShooterMotor.clearFaults();
+
     rightShooterMotor.setOpenLoopRampRate(0.5);
     rightShooterMotor.setClosedLoopRampRate(0.5);
 
@@ -46,9 +48,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("flywheleRPM", rightShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("RPM Offset", RPMOffset);
-    SmartDashboard.getNumber("Tune RPM", -1250);
+    //SmartDashboard.putNumber("flywheleRPM", rightShooterEncoder.getVelocity());
+    //SmartDashboard.putNumber("RPM Offset", RPMOffset);
+    //SmartDashboard.getNumber("Tune RPM", -1250);
   }
 
   public void setFlywheelRPM(double RPM){
@@ -67,9 +69,9 @@ public class Shooter extends SubsystemBase {
     return rightShooterEncoder.getVelocity();
   }
 
-  public double TuningRPM(){
+  /*public double TuningRPM(){
     return SmartDashboard.getNumber("Tune RPM", -1250);
-  }
+  }*/
 
   public void setRampRate(double rampRate) {
     rightShooterMotor.setOpenLoopRampRate(rampRate);

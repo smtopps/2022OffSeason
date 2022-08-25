@@ -11,15 +11,17 @@ public class RevShooter extends CommandBase {
   public static boolean FlywheelAtSpeed = false;
   private final Shooter shooter;
   private final Limelight limelight;
+  private final boolean rumble;
 
   private double RPM = 1900;
   private int Counter = 0;
   private int Delay = 0;
   private boolean hoodPosition = false;
 
-  public RevShooter(Shooter shooter, Limelight limelight) {
+  public RevShooter(Shooter shooter, Limelight limelight, boolean rumble) {
     this.shooter = shooter;
     this.limelight = limelight;
+    this.rumble = rumble;
     addRequirements(shooter, limelight);
   }
 
@@ -36,14 +38,14 @@ public class RevShooter extends CommandBase {
       //hoodPosition = false;
       //shooter.setHoodPosition(hoodPosition);
       //Delay = 15;
-    }else if(limelight.getTV() == 1 && hoodPosition == false && limelight.getTY() < -2.5 && Delay == 0){
+    }else if(limelight.getTV() == 1 && hoodPosition == false && limelight.getTY() < -4.5 && Delay == 0){
       hoodPosition = true;
       shooter.setHoodPosition(hoodPosition);
-      Delay = 15;
+      Delay = 20;
     }else if(limelight.getTV() == 1 && hoodPosition == true && limelight.getTY() > 5 && Delay == 0){
       hoodPosition = false;
       shooter.setHoodPosition(hoodPosition);
-      Delay = 15;
+      Delay = 20;
     }
 
 
@@ -55,14 +57,16 @@ public class RevShooter extends CommandBase {
       RPM = 1900;
       //System.out.println("does not see target");
     }else if(limelight.getTV() == 1 && hoodPosition == false && Delay == 0){
-      RPM = (2421+(-57.7*limelight.getTY())+(1.57*(Math.pow(limelight.getTY(), 2))));
+      RPM = (2635+(-39.3*limelight.getTY())+(0.475*(Math.pow(limelight.getTY(), 2))));
       //System.out.println("hood in low position");
     }else if(limelight.getTV() == 1 && hoodPosition == true && Delay == 0){
-      RPM = (20+2435+(-67.2*limelight.getTY())+(1.99*(Math.pow(limelight.getTY(), 2))));
+      RPM = (2781+(-57.8*limelight.getTY())+(0.686*(Math.pow(limelight.getTY(), 2))));
       //System.out.println("hood in high position");
     }else{
       //System.out.println("issue");
     }
+
+    RPM = RPM+RobotContainer.RpmOffset;
 
     shooter.setFlywheelRPM(-RPM);
 
@@ -71,23 +75,21 @@ public class RevShooter extends CommandBase {
 
     if((Math.abs(shooter.getFlywheelRPM() + RPM)) < 30 && Delay == 0) {
       Counter++;
-    }else if(Delay > 0){
-      Counter = 0;
     }
 
-    if(limelight.getTV() == 1 && Counter >= 3 && limelight.getTY() <= 18.5 && limelight.getTY() >= -7 && Delay == 0) { //for low goal it was 8 to -12
+    if(limelight.getTV() == 1 && Counter >= 3 && limelight.getTY() <= 18.5 && limelight.getTY() >= -2.5) { //for low goal it was 8 to -12
       FlywheelAtSpeed = true;
     }else{
       FlywheelAtSpeed = false;
     }
 
-    if(limelight.getTV() == 0){
+    if(limelight.getTV() == 0 && rumble == true){
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
-    }else if(limelight.getTY() > 18.5){ // for low goal was 8
+    }else if(limelight.getTY() > 18.5 && rumble == true){ // for low goal was 8
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
-    }else if(limelight.getTY() < -7){ // for low goal was -12
+    }else if(limelight.getTY() < -7 && rumble == true){ // for low goal was -12
       RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 1);
     }else{

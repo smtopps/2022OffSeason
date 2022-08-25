@@ -7,9 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 /** Add your docs here. */
-public class TriggerRButton extends Button {
+public class OperatorTriggerRButton extends Button {
     @Override
     public boolean get() {
-        return RobotContainer.driverController.getRightTriggerAxis() > 0.5;
+        return RobotContainer.operatorController.getRightTriggerAxis() > 0.5;
     }
 }

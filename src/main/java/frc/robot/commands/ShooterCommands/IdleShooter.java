@@ -8,10 +8,12 @@ import frc.robot.subsystems.Shooter;
 public class IdleShooter extends CommandBase {
   public final Shooter shooter;
   public final Limelight limelight;
+  public final IdleShooterState idleShooterState;
 
-  public IdleShooter(Shooter shooter, Limelight limelight) {
+  public IdleShooter(Shooter shooter, Limelight limelight, IdleShooterState idleShooterState) {
     this.shooter = shooter;
     this.limelight = limelight;
+    this.idleShooterState = idleShooterState;
     addRequirements(shooter);
     addRequirements(limelight);
   }
@@ -25,8 +27,10 @@ public class IdleShooter extends CommandBase {
 
   @Override
   public void execute() {
-    if(RobotContainer.enableIdle == true){
-      shooter.setFlywheelRPM(-1250);
+    if(RobotContainer.enableIdle == true && idleShooterState == IdleShooterState.Idle){
+      shooter.setFlywheelRPM(-1000);
+    }else if(idleShooterState == IdleShooterState.Running) {
+      shooter.setFlywheelRPM(-1000);
     }else{
       shooter.stopMotors();
     }
@@ -40,5 +44,9 @@ public class IdleShooter extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public enum IdleShooterState{
+    Running, Idle
   }
 }

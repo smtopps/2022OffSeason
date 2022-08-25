@@ -44,6 +44,7 @@ public class RetractClimber extends CommandBase {
       Timer.delay(0.05);
       firstPass = false;
     }
+    //Timer.delay(0.05);
     if (Math.abs(climber.leftClimberVelocity()) < 1 && Math.abs(climber.rightClimberVelocity()) < 1) {
       return true;
     }else{

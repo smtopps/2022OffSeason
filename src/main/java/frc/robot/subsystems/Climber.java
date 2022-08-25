@@ -25,6 +25,8 @@ public class Climber extends SubsystemBase {
     rightClimberMotor.setIdleMode(IdleMode.kBrake);
     leftClimberMotor.setSmartCurrentLimit(80);
     rightClimberMotor.setSmartCurrentLimit(80);
+    leftClimberMotor.clearFaults();
+    rightClimberMotor.clearFaults();
 
     leftClimberMotor.setInverted(false);
     rightClimberMotor.setInverted(true);
@@ -34,6 +36,8 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("ClimberLeftEncoder", leftClimberEncoder());
     SmartDashboard.putNumber("ClimberRightEncoder", rightClimberEncoder());
+    //SmartDashboard.putNumber("ClimberLeftCurrent", leftClimberMotor.getOutputCurrent());
+    //SmartDashboard.putNumber("ClimberRightCurrent", rightClimberMotor.getOutputCurrent());
   }
 
   public void leftClimberSpeed(double voltage) {

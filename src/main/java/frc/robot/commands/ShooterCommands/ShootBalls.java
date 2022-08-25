@@ -8,10 +8,10 @@ import frc.robot.subsystems.Turret;
 
 public class ShootBalls extends ParallelRaceGroup {
 
-  public ShootBalls(Shooter shooter, Turret turret, Limelight limelight, Feeder feeder) {
+  public ShootBalls(Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, boolean rumble) {
     addCommands(
       new AlignTurret(turret, limelight),
-      new RevShooter(shooter, limelight),
+      new RevShooter(shooter, limelight, rumble),
       //new TuneShooter(shooter, limelight),
       new FeedBallsToShooter(limelight, feeder)
     );

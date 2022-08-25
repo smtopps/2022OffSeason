@@ -1,14 +1,19 @@
 package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ExtendClimber extends CommandBase {
   public final double setpoint;
   public final Climber climber;
-  private final PIDController leftPidController = new PIDController(-1, 0, 0);
-  private final PIDController rightPidController = new PIDController(-1, 0, 0);
+  //private final PIDController leftPidController = new PIDController(0.6, 0, 0);
+  //private final PIDController rightPidController = new PIDController(0.6, 0, 0);
+  //private final Constraints constraints = new Constraints(1, 1);
+  //private final ProfiledPIDController leftPidController = new ProfiledPIDController(0.6, 0, 0, constraints);
+  //private final ProfiledPIDController rightPidController = new ProfiledPIDController(0.6, 0, 0, constraints);
 
   public ExtendClimber(Climber climber, double setpoint) {
     this.climber = climber;
@@ -18,15 +23,15 @@ public class ExtendClimber extends CommandBase {
 
   @Override
   public void initialize() {
-    leftPidController.setSetpoint(setpoint);
-    rightPidController.setSetpoint(setpoint);
-    leftPidController.setTolerance(1);
-    rightPidController.setTolerance(1);
+    //leftPidController.setSetpoint(setpoint);
+    //rightPidController.setSetpoint(setpoint);
+    //leftPidController.setTolerance(1);
+    //rightPidController.setTolerance(1);
   }
 
   @Override
   public void execute() {
-    /*double leftError = setpoint - climber.leftClimberEncoder();
+    double leftError = setpoint - climber.leftClimberEncoder();
     double rightError = setpoint - climber.rightClimberEncoder();
     double leftSpeed = leftError * 0.6;
     if(leftSpeed < 1){
@@ -37,8 +42,8 @@ public class ExtendClimber extends CommandBase {
       rightSpeed = 1;
     }
 
-    SmartDashboard.putNumber("leftSpeed", leftSpeed);
-    SmartDashboard.putNumber("rightSpeed", rightSpeed);
+    //SmartDashboard.putNumber("leftSpeed", leftSpeed);
+    //SmartDashboard.putNumber("rightSpeed", rightSpeed);
     
     if(climber.leftClimberEncoder() < setpoint) {
       climber.leftClimberSpeed(leftSpeed);
@@ -49,10 +54,10 @@ public class ExtendClimber extends CommandBase {
       climber.rightClimberSpeed(rightSpeed);
     }else{
       climber.rightClimberStop();
-    }*/
+    }
 
-    climber.leftClimberSpeed(leftPidController.calculate(climber.leftClimberEncoder()));
-    climber.rightClimberSpeed(rightPidController.calculate(climber.rightClimberEncoder()));
+    //limber.leftClimberSpeed(leftPidController.calculate(climber.leftClimberEncoder()));
+    //climber.rightClimberSpeed(rightPidController.calculate(climber.rightClimberEncoder()));
   }
 
   @Override
@@ -63,16 +68,16 @@ public class ExtendClimber extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    /*if(climber.leftClimberEncoder() < setpoint && climber.rightClimberEncoder() < setpoint) {
+    if(climber.leftClimberEncoder() < setpoint && climber.rightClimberEncoder() < setpoint) {
       return false;
     }else{
       return true;
-    }*/
-
-    if(leftPidController.atSetpoint() && rightPidController.atSetpoint()) {
-      return true;
-    }else{
-      return false;
     }
+
+    /*if(leftPidController.atSetpoint() && rightPidController.atSetpoint()) {
+      return true;
+    }else{
+      return false;
+    }*/
   }
 }

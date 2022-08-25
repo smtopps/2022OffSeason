@@ -21,7 +21,7 @@ public class ManualTurretControl extends CommandBase {
 
   @Override
   public void execute() {
-    turret.turretSpeed(MathUtil.applyDeadband(rightXJoystick.getAsDouble(), 0.02)*0.3);
+    turret.turretSpeed(MathUtil.applyDeadband(rightXJoystick.getAsDouble(), 0.1)*0.5);
   }
 
   @Override

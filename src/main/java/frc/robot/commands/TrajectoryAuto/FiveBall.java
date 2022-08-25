@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.IntakeCommands.IntakePositionPID;
+import frc.robot.commands.IntakeCommands.ZeroIntake;
+import frc.robot.commands.IntakeCommands.IntakePositionPID.IntakingState;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
 import frc.robot.commands.SettingsCommands.EnableColorSensor.ColorSensorState;
 import frc.robot.commands.ShooterCommands.ShootBalls;
@@ -30,29 +32,30 @@ public class FiveBall extends SequentialCommandGroup {
   /** Creates a new FiveBall. */
   public FiveBall(DriveBase driveBase, Intake intake, Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, Pigeon2Subsystem pigeon2Subsystem, double waitTime) {
     Trajectory trajectory1 = PathPlanner.loadPath("5BallPt1", 1.5, 2, false);
-    Trajectory trajectory2 = PathPlanner.loadPath("5BallPt2", 1.5, 2, false);
-    Trajectory trajectory3 = PathPlanner.loadPath("5BallPt3", 1.5, 2, false);
-    Trajectory trajectory4 = PathPlanner.loadPath("5BallPt4", 1.5, 2, true);
+    Trajectory trajectory2 = PathPlanner.loadPath("5BallPt2", 2, 2, false);
+    Trajectory trajectory3 = PathPlanner.loadPath("5BallPt3", 2, 2, false);
+    Trajectory trajectory4 = PathPlanner.loadPath("5BallPt4", 3, 3, true);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(waitTime),
       new EnableColorSensor(ColorSensorState.DISSABLED),
+      new ZeroIntake(intake),
       new ResetOdometry(driveBase, trajectory1),
       new ParallelRaceGroup(
-        new IntakePositionPID(intake),
+        new IntakePositionPID(intake, IntakingState.INTAKE),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory1)
       ),
-      new ShootBalls(shooter, turret, limelight, feeder),
+      new ShootBalls(shooter, turret, limelight, feeder, false),
       new ParallelRaceGroup(
-        new IntakePositionPID(intake),
+        new IntakePositionPID(intake, IntakingState.INTAKE),
         new PrepareBallsInFeeder(feeder),
         driveBase.createCommandForTrajectory(trajectory2)
       ),
-      new ShootBalls(shooter, turret, limelight, feeder),
+      new ShootBalls(shooter, turret, limelight, feeder, false),
       new ParallelRaceGroup(
-        new IntakePositionPID(intake),
+        new IntakePositionPID(intake, IntakingState.INTAKE),
         new PrepareBallsInFeeder(feeder),
         new SequentialCommandGroup(
           driveBase.createCommandForTrajectory(trajectory3),
@@ -60,7 +63,7 @@ public class FiveBall extends SequentialCommandGroup {
         )
       ),
       driveBase.createCommandForTrajectory(trajectory4),
-      new ShootBalls(shooter, turret, limelight, feeder),
+      new ShootBalls(shooter, turret, limelight, feeder, false),
       new EnableColorSensor(ColorSensorState.ENABLED)
     );
   }

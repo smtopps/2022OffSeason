@@ -11,8 +11,8 @@ import frc.robot.subsystems.Climber;
 public class HoldClimberPosition extends CommandBase {
   private final Climber climber;
   private double setpoint;
-  private final PIDController leftPidController = new PIDController(-1, 0, 0);
-  private final PIDController rightPidController = new PIDController(-1, 0, 0);
+  private final PIDController leftPidController = new PIDController(0.75, 0, 0);
+  private final PIDController rightPidController = new PIDController(0.75, 0, 0);
   /** Creates a new HoldClimberPosition. */
   public HoldClimberPosition(Climber climber) {
     this.climber = climber;
