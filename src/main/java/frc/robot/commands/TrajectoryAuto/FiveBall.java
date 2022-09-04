@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.TrajectoryAuto;
 
 import com.pathplanner.lib.PathPlanner;
@@ -12,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.IntakeCommands.IntakePositionPID;
+import frc.robot.commands.IntakeCommands.RetractIntakeVelocity;
 import frc.robot.commands.IntakeCommands.ZeroIntake;
 import frc.robot.commands.IntakeCommands.IntakePositionPID.IntakingState;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
@@ -25,21 +22,17 @@ import frc.robot.subsystems.Pigeon2Subsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FiveBall extends SequentialCommandGroup {
-  /** Creates a new FiveBall. */
   public FiveBall(DriveBase driveBase, Intake intake, Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, Pigeon2Subsystem pigeon2Subsystem, double waitTime) {
     Trajectory trajectory1 = PathPlanner.loadPath("5BallPt1", 1.5, 2, false);
     Trajectory trajectory2 = PathPlanner.loadPath("5BallPt2", 2, 2, false);
     Trajectory trajectory3 = PathPlanner.loadPath("5BallPt3", 2, 2, false);
-    Trajectory trajectory4 = PathPlanner.loadPath("5BallPt4", 3, 3, true);
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+    Trajectory trajectory4 = PathPlanner.loadPath("5BallPt4", 0.5, 2, true);
+    Trajectory trajectory5 = PathPlanner.loadPath("5BallPt5", 3, 3, true);
+
     addCommands(
       new WaitCommand(waitTime),
-      new EnableColorSensor(ColorSensorState.DISSABLED),
+      //new EnableColorSensor(ColorSensorState.DISSABLED),
       new ZeroIntake(intake),
       new ResetOdometry(driveBase, trajectory1),
       new ParallelRaceGroup(
@@ -59,10 +52,14 @@ public class FiveBall extends SequentialCommandGroup {
         new PrepareBallsInFeeder(feeder),
         new SequentialCommandGroup(
           driveBase.createCommandForTrajectory(trajectory3),
-          new WaitCommand(2)
+          driveBase.createCommandForTrajectory(trajectory4),
+          new WaitCommand(0.5)
         )
       ),
-      driveBase.createCommandForTrajectory(trajectory4),
+      new ParallelRaceGroup(
+        driveBase.createCommandForTrajectory(trajectory5),
+        new RetractIntakeVelocity(intake)
+      ),
       new ShootBalls(shooter, turret, limelight, feeder, false),
       new EnableColorSensor(ColorSensorState.ENABLED)
     );

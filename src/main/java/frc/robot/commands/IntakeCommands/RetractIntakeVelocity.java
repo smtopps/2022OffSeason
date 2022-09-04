@@ -5,7 +5,6 @@ import frc.robot.subsystems.Intake;
 
 public class RetractIntakeVelocity extends CommandBase {
   public final Intake intake;
-  public boolean holdIntake = false;
 
   public RetractIntakeVelocity(Intake intake) {
     this.intake = intake;

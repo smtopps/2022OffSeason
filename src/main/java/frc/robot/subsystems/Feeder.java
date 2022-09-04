@@ -14,7 +14,7 @@ public class Feeder extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final CANSparkMax indexerMotor = new CANSparkMax(Constants.FEEDER_MOTOR_ID, MotorType.kBrushless);
   private final ColorSensorV3 indexerColorSensor = new ColorSensorV3(i2cPort);
-  private DriverStation.Alliance color; //= DriverStation.getAlliance();
+  private DriverStation.Alliance color;
 
   public Feeder() {
     indexerMotor.restoreFactoryDefaults();
@@ -22,13 +22,12 @@ public class Feeder extends SubsystemBase {
     indexerMotor.setSmartCurrentLimit(50);
     //indexerMotor.setClosedLoopRampRate(0.5);
     //indexerMotor.setOpenLoopRampRate(0.5);
-    indexerMotor.clearFaults();
-    //color = DriverStation.getAlliance();
   }
 
   @Override
   public void periodic() {
-    //SmartDashboard.putNumber("Feeder Proximity", indexerColorSensor.getProximity());
+    SmartDashboard.putBoolean("Sensor", indexerColorSensor.isConnected());
+    SmartDashboard.putNumber("Feeder Proximity", indexerColorSensor.getProximity());
     //SmartDashboard.putNumber("Feeder Red", indexerColorSensor.getRed());
     //SmartDashboard.putNumber("Feeder Blue", indexerColorSensor.getBlue());
     //SmartDashboard.putNumber("Feeder Green", indexerColorSensor.getGreen());

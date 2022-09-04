@@ -13,7 +13,7 @@ public class RevShooter extends CommandBase {
   private final Limelight limelight;
   private final boolean rumble;
 
-  private double RPM = 1900;
+  private double RPM = 2100;
   private int Counter = 0;
   private int Delay = 0;
   private boolean hoodPosition = false;
@@ -34,18 +34,14 @@ public class RevShooter extends CommandBase {
 
   @Override
   public void execute() {
-    if(limelight.getTV() == 0 && Delay == 0){
-      //hoodPosition = false;
-      //shooter.setHoodPosition(hoodPosition);
-      //Delay = 15;
-    }else if(limelight.getTV() == 1 && hoodPosition == false && limelight.getTY() < -4.5 && Delay == 0){
+    if(limelight.getTV() == 1 && hoodPosition == false && limelight.getTY() < -4.5 && Delay == 0){
       hoodPosition = true;
       shooter.setHoodPosition(hoodPosition);
-      Delay = 20;
+      Delay = 25;
     }else if(limelight.getTV() == 1 && hoodPosition == true && limelight.getTY() > 5 && Delay == 0){
       hoodPosition = false;
       shooter.setHoodPosition(hoodPosition);
-      Delay = 20;
+      Delay = 25;
     }
 
 
@@ -57,10 +53,10 @@ public class RevShooter extends CommandBase {
       RPM = 1900;
       //System.out.println("does not see target");
     }else if(limelight.getTV() == 1 && hoodPosition == false && Delay == 0){
-      RPM = (2635+(-39.3*limelight.getTY())+(0.475*(Math.pow(limelight.getTY(), 2))));
+      RPM = (40+2583+(-49.9*limelight.getTY())+(1.02*(Math.pow(limelight.getTY(), 2))));
       //System.out.println("hood in low position");
     }else if(limelight.getTV() == 1 && hoodPosition == true && Delay == 0){
-      RPM = (2781+(-57.8*limelight.getTY())+(0.686*(Math.pow(limelight.getTY(), 2))));
+      RPM = (40+2658+(-54.4*limelight.getTY())+(0.413*(Math.pow(limelight.getTY(), 2))));
       //System.out.println("hood in high position");
     }else{
       //System.out.println("issue");
@@ -106,15 +102,15 @@ public class RevShooter extends CommandBase {
     shooter.stopMotors();
     hoodPosition = false;
     shooter.setHoodPosition(false);
-    RPM = 1900;
+    RPM = 2100;
     Counter = 0;
     Delay = 0;
     SmartDashboard.putBoolean("FlywheelAtSpeed", false);
     RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 0);
     RobotContainer.driverController.setRumble(RumbleType.kRightRumble, 0);
-    limelight.setLEDMode(1);
-    limelight.setCameraMode(1);
-    limelight.setStream(2);
+    //limelight.setLEDMode(1);
+    //limelight.setCameraMode(1);
+    //limelight.setStream(2);
   }
 
   @Override

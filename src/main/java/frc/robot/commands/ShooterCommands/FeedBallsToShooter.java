@@ -12,7 +12,7 @@ public class FeedBallsToShooter extends CommandBase {
   public final Feeder feeder;
   public static int counter = 0;
   public static boolean shooting = false;
-  public static double feederSpeed = -5;
+  public static final double feederSpeed = -5;
   public static double turretOffset = 0;
   public static double shooterOffset = 0;
 

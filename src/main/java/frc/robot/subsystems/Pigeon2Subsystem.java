@@ -7,18 +7,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Pigeon2Subsystem extends SubsystemBase {
-  /** Creates a new Pigeon2Subsystem */
   private final static Pigeon2 m_pigeon2 =  new Pigeon2(Constants.PIGEON2_ID);
-
 
   public Pigeon2Subsystem() {
     //m_pigeon2.configFactoryDefault();
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
   public static void zeroGyroscope() {
     m_pigeon2.setYaw(0);

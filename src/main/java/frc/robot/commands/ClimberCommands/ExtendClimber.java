@@ -1,8 +1,5 @@
 package frc.robot.commands.ClimberCommands;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -68,10 +65,10 @@ public class ExtendClimber extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(climber.leftClimberEncoder() < setpoint && climber.rightClimberEncoder() < setpoint) {
-      return false;
-    }else{
+    if(climber.leftClimberEncoder() >= setpoint && climber.rightClimberEncoder() >= setpoint) { //reversed returns and greater then or equal to
       return true;
+    }else{
+      return false;
     }
 
     /*if(leftPidController.atSetpoint() && rightPidController.atSetpoint()) {

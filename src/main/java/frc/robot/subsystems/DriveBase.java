@@ -56,11 +56,6 @@ public class DriveBase extends SubsystemBase {
     rightFollower.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, currentLimit, currentThreshold, 1));
     rightFollower.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, currentLimit, currentThreshold, 0.5));
 
-    leftLeader.clearStickyFaults();
-    leftFollower.clearStickyFaults();
-    rightLeader.clearStickyFaults();
-    rightFollower.clearStickyFaults();
-
     leftLeader.setNeutralMode(NeutralMode.Brake);
     leftFollower.setNeutralMode(NeutralMode.Brake);
     rightLeader.setNeutralMode(NeutralMode.Brake);
@@ -92,6 +87,7 @@ public class DriveBase extends SubsystemBase {
     field2d.setRobotPose(odometry.getPoseMeters());
 
     odometry.update(Pigeon2Subsystem.getGyroscopeRotation(), getLeftEncoderDistance(), getRightEncoderDistance());
+    differentialDrive.feed(); //moved from tankDriveVolts() to potentialy fix diffdrive error
   }
 
   public void arcadedrive(double throttle, double rotation, boolean squared) {
@@ -116,7 +112,7 @@ public class DriveBase extends SubsystemBase {
   private double nativeUnitsToDistanceMeters(double sensorCounts){
     double kCountsPerRev = 2048;
     double kGearRatio = (50.0/14.0)*(48.0/16.0);//10.71428571428571; added .0 to the end of all values to insure no integer division issues.
-    double kWheelRadiusInches = 5.6/2;
+    double kWheelRadiusInches = 6/2; //5.6/2
 		double motorRotations = (double)sensorCounts / kCountsPerRev;
 		double wheelRotations = motorRotations / kGearRatio;
 		double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
@@ -166,7 +162,7 @@ public class DriveBase extends SubsystemBase {
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftLeader.setVoltage(leftVolts);
     rightLeader.setVoltage(rightVolts);
-    differentialDrive.feed();
+    //differentialDrive.feed();
   }
 
   public Command createCommandForTrajectory(Trajectory trajectory) {

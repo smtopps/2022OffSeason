@@ -1,11 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.util.net.PortForwarder;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,9 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private final PowerDistribution PDH = new PowerDistribution(1, ModuleType.kRev);
-  private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.REV_PNEUMATIC_MODULE_ID);
-  private final PneumaticsControlModule pneumaticsControlModule = new PneumaticsControlModule(Constants.CTRE_PNEUMATICS_MODULE_ID);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -63,11 +56,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    PDH.clearStickyFaults();
-    pneumaticHub.clearStickyFaults();
-    pneumaticsControlModule.clearAllStickyFaults();
-    RobotContainer.getAutonomousCommand().schedule();
     LiveWindow.disableAllTelemetry();
+    RobotContainer.getAutonomousCommand().schedule();
   }
 
   @Override

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.TrajectoryAuto;
 
 import com.pathplanner.lib.PathPlanner;
@@ -12,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.IntakeCommands.IntakePositionPID;
+import frc.robot.commands.IntakeCommands.RetractIntakeVelocity;
 import frc.robot.commands.IntakeCommands.ZeroIntake;
 import frc.robot.commands.IntakeCommands.IntakePositionPID.IntakingState;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
@@ -25,20 +22,16 @@ import frc.robot.subsystems.Pigeon2Subsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FourBall extends SequentialCommandGroup {
-  /** Creates a new BasicTest. */
   public FourBall(DriveBase driveBase, Intake intake, Shooter shooter, Turret turret, Limelight limelight, Feeder feeder, Pigeon2Subsystem pigeon2Subsystem, double waitTime) {
-    Trajectory trajectory1 = PathPlanner.loadPath("4BallPt1", 1.5, 2, false);
-    Trajectory trajectory2 = PathPlanner.loadPath("4BallPt2", 2, 3, false);
-    Trajectory trajectory3 = PathPlanner.loadPath("4BallPt3", 3, 3, true);
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+    Trajectory trajectory1 = PathPlanner.loadPath("4BallPt1", 2, 2, false);
+    Trajectory trajectory2 = PathPlanner.loadPath("4BallPt2", 2, 2, false);
+    Trajectory trajectory3 = PathPlanner.loadPath("4BallPt3", 0.5, 2, true);
+    Trajectory trajectory4 = PathPlanner.loadPath("4BallPt4", 3.5, 2.5, true);
+
     addCommands(
       new WaitCommand(waitTime),
-      new EnableColorSensor(ColorSensorState.DISSABLED),
+      //new EnableColorSensor(ColorSensorState.DISSABLED),
       new ZeroIntake(intake),
       new ResetOdometry(driveBase, trajectory1),
       new ParallelRaceGroup(
@@ -52,10 +45,13 @@ public class FourBall extends SequentialCommandGroup {
         new PrepareBallsInFeeder(feeder),
         new SequentialCommandGroup(
           driveBase.createCommandForTrajectory(trajectory2),
-          new WaitCommand(2)
+          driveBase.createCommandForTrajectory(trajectory3)
         )
       ),
-      driveBase.createCommandForTrajectory(trajectory3),
+      new ParallelRaceGroup(
+        driveBase.createCommandForTrajectory(trajectory4),
+        new RetractIntakeVelocity(intake)
+      ),
       new ShootBalls(shooter, turret, limelight, feeder, false),
       new EnableColorSensor(ColorSensorState.ENABLED)
     );

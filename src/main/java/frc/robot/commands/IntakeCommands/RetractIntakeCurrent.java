@@ -39,7 +39,6 @@ public class RetractIntakeCurrent extends CommandBase {
       intake.intakeSpeed(-0.75);
     }
 
-    //SmartDashboard.putNumber("RotationCurrent", intake.intakeRotationCurrent());
     if(intake.intakeRotationCurrent() > 30 && counter <= 0) {
       holdIntake = true;
     }else if(counter <= -200) {

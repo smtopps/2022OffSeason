@@ -20,17 +20,17 @@ public class IdleShooter extends CommandBase {
 
   @Override
   public void initialize() {
-    limelight.setLEDMode(1);
-    limelight.setCameraMode(1);
+    //limelight.setLEDMode(1);
+    //limelight.setCameraMode(1);
     limelight.setStream(2);
   }
 
   @Override
   public void execute() {
     if(RobotContainer.enableIdle == true && idleShooterState == IdleShooterState.Idle){
-      shooter.setFlywheelRPM(-1000);
+      shooter.setFlywheelRPM(-1250);
     }else if(idleShooterState == IdleShooterState.Running) {
-      shooter.setFlywheelRPM(-1000);
+      shooter.setFlywheelRPM(-1250);
     }else{
       shooter.stopMotors();
     }

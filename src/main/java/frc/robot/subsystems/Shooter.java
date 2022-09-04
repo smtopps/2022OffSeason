@@ -19,8 +19,6 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxPIDController rightShooterPIDController = rightShooterMotor.getPIDController();
   private final RelativeEncoder rightShooterEncoder = rightShooterMotor.getEncoder();
   private final Solenoid hoodPositionCylinder = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.HOOD_POSITION);
-
-  double RPMOffset;
   
   public Shooter() {
     leftShooterMotor.restoreFactoryDefaults();
@@ -29,9 +27,6 @@ public class Shooter extends SubsystemBase {
     rightShooterMotor.setIdleMode(IdleMode.kCoast);
     leftShooterMotor.enableVoltageCompensation(11);
     rightShooterMotor.enableVoltageCompensation(11);
-
-    leftShooterMotor.clearFaults();
-    rightShooterMotor.clearFaults();
 
     rightShooterMotor.setOpenLoopRampRate(0.5);
     rightShooterMotor.setClosedLoopRampRate(0.5);
@@ -49,12 +44,11 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     //SmartDashboard.putNumber("flywheleRPM", rightShooterEncoder.getVelocity());
-    //SmartDashboard.putNumber("RPM Offset", RPMOffset);
     //SmartDashboard.getNumber("Tune RPM", -1250);
   }
 
   public void setFlywheelRPM(double RPM){
-    rightShooterPIDController.setReference(RPM - RPMOffset, ControlType.kVelocity);
+    rightShooterPIDController.setReference(RPM, ControlType.kVelocity);
   }
 
   public void setHoodPosition(boolean position) {

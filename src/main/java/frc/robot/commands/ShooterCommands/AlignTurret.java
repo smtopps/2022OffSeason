@@ -27,7 +27,7 @@ public class AlignTurret extends CommandBase {
 
     if(RobotContainer.enableLimelight == true) {
       if(limelight.getTV() == 1) {
-        if(limelight.getTX()+FeedBallsToShooter.turretOffset <= 2 && limelight.getTX()+FeedBallsToShooter.turretOffset >= -2) {
+        if(limelight.getTX()+FeedBallsToShooter.turretOffset <= 1.5 && limelight.getTX()+FeedBallsToShooter.turretOffset >= -1.5) {
           turret.stopTurret();;
           TurretAligned = true;
         }else{

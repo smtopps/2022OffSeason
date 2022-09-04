@@ -34,7 +34,7 @@ public class TuneShooter extends CommandBase {
     RPM = SmartDashboard.getNumber("Tune RPM", 2300);
     shooter.setFlywheelRPM(-RPM);
     SmartDashboard.putNumber("Set RPM", -RPM);
-    shooter.setHoodPosition(true);
+    shooter.setHoodPosition(false);
 
     if((Math.abs(shooter.getFlywheelRPM() + RPM)) < 30) { // try to get to 30
       Counter++;
@@ -54,7 +54,7 @@ public class TuneShooter extends CommandBase {
     FlywheelAtSpeed = false;
     shooter.stopMotors();
     //shooter.setHoodPosition(false);
-    RPM = 1250;
+    RPM = 2300;
     Counter = 0;
     SmartDashboard.putBoolean("FlywheelAtSpeed", false);
     RobotContainer.driverController.setRumble(RumbleType.kLeftRumble, 0);
