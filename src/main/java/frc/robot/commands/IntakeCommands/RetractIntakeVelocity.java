@@ -5,7 +5,6 @@ import frc.robot.subsystems.Intake;
 
 public class RetractIntakeVelocity extends CommandBase {
   public final Intake intake;
-  public boolean holdIntake = false;
 
   public RetractIntakeVelocity(Intake intake) {
     this.intake = intake;
@@ -17,14 +16,10 @@ public class RetractIntakeVelocity extends CommandBase {
 
   @Override
   public void execute() {
-    if(holdIntake == false) {
-      intake.intakeRotationSpeed(-1);
+    if(intake.getIntakeRotationSpeed() < 0.01) {
+      intake.intakeRotationSpeed(0.5);
     }else{
-      intake.intakeRotationSpeed(-0.5);
-    }
-
-    if(Math.abs(intake.getIntakeRotationSpeed()) < 1) {
-      holdIntake = true;
+      intake.intakeRotationSpeed(3.5);
     }
   }
 

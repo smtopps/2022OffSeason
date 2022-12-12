@@ -19,21 +19,8 @@ public class PrepareBallsInFeeder extends CommandBase {
 
   @Override
   public void execute() {
-    /*
-     * if(feeder.isBallInFeeder() == true) {
-     * if(feeder.isBallRightColor()){
-     * feeder.feederStop();
-     * }else{
-     * feeder.feederSpeed(-2.5);
-     * }
-     * }else{
-     * feeder.feederSpeed(-2.5);;
-     * }
-     */
     if (RobotContainer.enableIdle == true) {
-      SmartDashboard.putBoolean("Feeder System Activated", true);
       if (RobotContainer.enableColorSensor == true) {
-        SmartDashboard.putBoolean("Feeder Color Activated", true);
         if (feeder.isBallInFeeder() && feeder.isBallRightColor()) {
           feeder.feederStop();
           SmartDashboard.putBoolean("Ball In Feeder", true);
@@ -42,7 +29,6 @@ public class PrepareBallsInFeeder extends CommandBase {
           SmartDashboard.putBoolean("Ball In Feeder", false);
         }
       } else {
-        SmartDashboard.putBoolean("Feeder Color Activated", false);
         if (feeder.isBallInFeeder()) {
           feeder.feederStop();
           SmartDashboard.putBoolean("Ball In Feeder", true);
@@ -52,7 +38,6 @@ public class PrepareBallsInFeeder extends CommandBase {
         }
       }
     } else {
-      SmartDashboard.putBoolean("Feeder System Activated", false);
       feeder.feederStop();
       SmartDashboard.putBoolean("Ball In Feeder", false);
     }

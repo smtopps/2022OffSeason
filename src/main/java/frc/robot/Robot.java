@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Enable Color Sensor", RobotContainer.enableColorSensor);
     SmartDashboard.putBoolean("Enable Limelight", RobotContainer.enableLimelight);
     SmartDashboard.putBoolean("Enable Idle", RobotContainer.enableIdle);
+    SmartDashboard.putNumber("RPM Offsest", RobotContainer.RpmOffset);
     //RobotContainer.waitTime = SmartDashboard.getNumber("Auto Wait", 0);
   }
 
@@ -54,13 +56,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    LiveWindow.disableAllTelemetry();
     RobotContainer.getAutonomousCommand().schedule();
   }
 
   @Override
-  public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -68,6 +69,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    LiveWindow.disableAllTelemetry();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

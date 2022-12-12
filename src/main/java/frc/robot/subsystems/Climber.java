@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+//mct testing of git
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -18,6 +17,7 @@ public class Climber extends SubsystemBase {
   private final RelativeEncoder rightClimberEncoder = rightClimberMotor.getEncoder();
   private final Solenoid climberSolenoid = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, 14);
   private final Compressor compressor = new Compressor(Constants.CTRE_PNEUMATICS_MODULE_ID, PneumaticsModuleType.CTREPCM);
+  
   public Climber() {
     leftClimberMotor.restoreFactoryDefaults();
     rightClimberMotor.restoreFactoryDefaults();
@@ -32,8 +32,10 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("ClimberLeftEncoder", leftClimberEncoder());
-    SmartDashboard.putNumber("ClimberRightEncoder", rightClimberEncoder());
+    //SmartDashboard.putNumber("ClimberLeftEncoder", leftClimberEncoder());
+    //SmartDashboard.putNumber("ClimberRightEncoder", rightClimberEncoder());
+    //SmartDashboard.putNumber("ClimberLeftCurrent", leftClimberMotor.getOutputCurrent());
+    //SmartDashboard.putNumber("ClimberRightCurrent", rightClimberMotor.getOutputCurrent());
   }
 
   public void leftClimberSpeed(double voltage) {

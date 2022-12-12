@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -20,8 +19,6 @@ public class Shooter extends SubsystemBase {
   private final SparkMaxPIDController rightShooterPIDController = rightShooterMotor.getPIDController();
   private final RelativeEncoder rightShooterEncoder = rightShooterMotor.getEncoder();
   private final Solenoid hoodPositionCylinder = new Solenoid(Constants.REV_PNEUMATIC_MODULE_ID, PneumaticsModuleType.REVPH, Constants.HOOD_POSITION);
-
-  double RPMOffset;
   
   public Shooter() {
     leftShooterMotor.restoreFactoryDefaults();
@@ -46,13 +43,12 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("flywheleRPM", rightShooterEncoder.getVelocity());
-    SmartDashboard.putNumber("RPM Offset", RPMOffset);
-    SmartDashboard.getNumber("Tune RPM", -1250);
+    //SmartDashboard.putNumber("flywheleRPM", rightShooterEncoder.getVelocity());
+    //SmartDashboard.getNumber("Tune RPM", -1250);
   }
 
   public void setFlywheelRPM(double RPM){
-    rightShooterPIDController.setReference(RPM - RPMOffset, ControlType.kVelocity);
+    rightShooterPIDController.setReference(RPM, ControlType.kVelocity);
   }
 
   public void setHoodPosition(boolean position) {
@@ -67,9 +63,9 @@ public class Shooter extends SubsystemBase {
     return rightShooterEncoder.getVelocity();
   }
 
-  public double TuningRPM(){
+  /*public double TuningRPM(){
     return SmartDashboard.getNumber("Tune RPM", -1250);
-  }
+  }*/
 
   public void setRampRate(double rampRate) {
     rightShooterMotor.setOpenLoopRampRate(rampRate);

@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,13 +24,20 @@ public class Intake extends SubsystemBase {
     intakeRollerMotor.setNeutralMode(NeutralMode.Coast);
     intakeRollerMotor.configOpenloopRamp(0.5);
     intakeRollerMotor.configClosedloopRamp(0.5);
-    intakeRotationMotor.setIdleMode(IdleMode.kCoast);
-    intakeRotationMotor.setSmartCurrentLimit(20, 20);
-
+    intakeRollerMotor.enableCurrentLimit(true);
+    intakeRollerMotor.configContinuousCurrentLimit(35);
+    intakeRotationMotor.setIdleMode(IdleMode.kBrake);
+    intakeRotationMotor.setSmartCurrentLimit(25);
+    intakeRotationMotor.enableVoltageCompensation(10);
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Intake Rotation Encoder", getIntakeRotationPosition());
+    //SmartDashboard.putNumber("Intake Roller Supply Current", intakeRollerMotor.getSupplyCurrent());
+    SmartDashboard.putNumber("Intake Rotation Current", intakeRotationMotor.getOutputCurrent());
+    //SmartDashboard.putNumber("Intake Rotation Velocity", intakeRotationEncoder.getVelocity());
+  }
 
   public void intakeSpeed(double speed) {
     intakeRollerMotor.set(ControlMode.PercentOutput, speed);

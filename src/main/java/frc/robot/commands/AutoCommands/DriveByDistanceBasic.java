@@ -18,7 +18,6 @@ public class DriveByDistanceBasic extends CommandBase {
 
   @Override
   public void initialize() {
-    SmartDashboard.putBoolean("DriveByDistance", true);
     driveBase.setDeadband(0.0);
     driveBase.resetEncoderPosition();
   }
@@ -45,7 +44,6 @@ public class DriveByDistanceBasic extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("DriveByDistance", false);
     driveBase.autoArcadedrive(0, 0);
     driveBase.resetEncoderPosition();
   }

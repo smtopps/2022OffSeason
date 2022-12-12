@@ -12,7 +12,7 @@ public class FeedBallsToShooter extends CommandBase {
   public final Feeder feeder;
   public static int counter = 0;
   public static boolean shooting = false;
-  public static double feederSpeed = -5;
+  public static final double feederSpeed = -5;
   public static double turretOffset = 0;
   public static double shooterOffset = 0;
 
@@ -85,7 +85,7 @@ public class FeedBallsToShooter extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(counter < 50*2.5){
+    if(counter < 50*1.0){ //was 2.5 seconds
       return false;
     }else{
       return true;

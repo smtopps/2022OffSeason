@@ -9,26 +9,32 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.PrepareBallsInFeeder;
 import frc.robot.commands.ClimberCommands.BarToBarGoup;
-import frc.robot.commands.ClimberCommands.EnableCompressor;
 import frc.robot.commands.ClimberCommands.ExtendMidBarGroup;
 import frc.robot.commands.ClimberCommands.ManualClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.RetractClimberGroup;
 import frc.robot.commands.ClimberCommands.ToggleClimber;
-import frc.robot.commands.IntakeCommands.RunIntake;
-import frc.robot.commands.IntakeCommands.ToggleIntake;
-import frc.robot.commands.IntakeCommands.ToggleIntake.IntakePosition;
+import frc.robot.commands.ClimberCommands.ToggleClimber.ClimberState;
+import frc.robot.commands.IntakeCommands.IntakePositionPID;
+import frc.robot.commands.IntakeCommands.RetractIntakeVelocity;
+import frc.robot.commands.IntakeCommands.ZeroIntake;
+import frc.robot.commands.IntakeCommands.IntakePositionPID.IntakingState;
 import frc.robot.commands.SettingsCommands.EnableColorSensor;
+import frc.robot.commands.SettingsCommands.EnableCompressor;
 import frc.robot.commands.SettingsCommands.EnableIdle;
 import frc.robot.commands.SettingsCommands.EnableLimelight;
+import frc.robot.commands.SettingsCommands.KillEverything;
+import frc.robot.commands.SettingsCommands.RpmOffset;
 import frc.robot.commands.SettingsCommands.EnableColorSensor.ColorSensorState;
+import frc.robot.commands.SettingsCommands.EnableCompressor.CompressorState;
 import frc.robot.commands.SettingsCommands.EnableIdle.IdleState;
 import frc.robot.commands.SettingsCommands.EnableLimelight.LimelightState;
+import frc.robot.commands.SettingsCommands.RpmOffset.OffsetDirection;
 import frc.robot.commands.ShooterCommands.IdleShooter;
 import frc.robot.commands.ShooterCommands.LowGoalShoot;
 import frc.robot.commands.ShooterCommands.ManualTurretControl;
-import frc.robot.commands.ShooterCommands.ResetTurretEncoder;
 import frc.robot.commands.ShooterCommands.ShootBalls;
+import frc.robot.commands.ShooterCommands.IdleShooter.IdleShooterState;
 import frc.robot.commands.TrajectoryAuto.FiveBall;
 import frc.robot.commands.TrajectoryAuto.FourBall;
 import frc.robot.commands.TrajectoryAuto.OneBallOneSteal;
@@ -67,6 +73,7 @@ public class RobotContainer {
   public static boolean enableColorSensor = true;
   public static boolean enableLimelight = true;
   public static boolean enableIdle = true;
+  public static double RpmOffset;
 
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -75,8 +82,8 @@ public class RobotContainer {
     turret.setDefaultCommand(new ManualTurretControl(turret, () -> operatorController.getRightX()));
     climber.setDefaultCommand(new ManualClimber(climber, () -> operatorController.getLeftY()));
     feeder.setDefaultCommand(new PrepareBallsInFeeder(feeder));
-    shooter.setDefaultCommand(new IdleShooter(shooter, limelight));
-    //intake.setDefaultCommand(new RetractIntakeCurrent(intake, State.RETRACTING));
+    shooter.setDefaultCommand(new IdleShooter(shooter, limelight, IdleShooterState.Idle));
+    intake.setDefaultCommand(new RetractIntakeVelocity(intake));
     
     configureButtonBindings();
 
@@ -92,24 +99,27 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 6).whileHeld(new RunIntake(intake, 0.7)); //was 0.8
-    //new JoystickButton(driverController, 6).whileHeld(new RetractIntakeCurrent(intake, State.INTAKE));
-    //new TriggerRButton().whileHeld(new RetractIntakeCurrent(intake, State.RIVERSING));
-    new JoystickButton(driverController, 4).whenPressed(new ToggleIntake(intake, IntakePosition.TOGGLE));
-    new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder));
+    new JoystickButton(driverController, 6).whileHeld(new IntakePositionPID(intake, IntakingState.INTAKE));
+    new DriverTriggerRButton().whenHeld(new IntakePositionPID(intake, IntakingState.OUTTAKE));//added to reverse for stuck ball
+    new JoystickButton(driverController, 5).whenHeld(new ShootBalls(shooter, turret, limelight, feeder, true));
     new JoystickButton(driverController, 2).whenHeld(new LowGoalShoot(feeder, shooter, limelight));
 
-    new POVButton(operatorController, 0).whenPressed(new ExtendMidBarGroup(climber, intake));
+    new POVButton(operatorController, 0).whenPressed(new ExtendMidBarGroup(climber));
     new POVButton(operatorController, 270).whenPressed(new BarToBarGoup(climber));
-    new POVButton(operatorController, 180).whenPressed(new RetractClimber(climber));
-    new POVButton(operatorController, 90).whenPressed(new RetractClimberGroup(climber));
-    new JoystickButton(operatorController, 6).whenPressed(new ToggleClimber(climber));
+    new POVButton(operatorController, 90).whenPressed(new RetractClimber(climber));
+    new POVButton(operatorController, 180).whenPressed(new RetractClimberGroup(climber));
+    new JoystickButton(operatorController, 2).whenPressed(new ToggleClimber(climber, ClimberState.TOGGLE));
 
-    new JoystickButton(operatorController, 7).whenPressed(new ResetTurretEncoder(turret));
+    new OperatorTriggerLButton().and(new OperatorTriggerRButton()).whileActiveOnce(new KillEverything(driveBase, climber, feeder, intake, shooter, turret), false);
+    //new JoystickButton(operatorController, 7).whenPressed(new ResetTurretEncoder(turret));
+    new JoystickButton(operatorController, 8).whenPressed(new ZeroIntake(intake));
+
+    new JoystickButton(operatorController, 5).whenPressed(new RpmOffset(OffsetDirection.DECERASE));
+    new JoystickButton(operatorController, 6).whenPressed(new RpmOffset(OffsetDirection.INCREASE));
     new JoystickButton(operatorController, 1).whenPressed(new EnableColorSensor(ColorSensorState.TOGGLE));
     new JoystickButton(operatorController, 3).whenPressed(new EnableLimelight(LimelightState.TOGGLE));
     new JoystickButton(operatorController, 4).whenPressed(new EnableIdle(IdleState.TOGGLE));
-    new JoystickButton(operatorController, 2).whenPressed(new EnableCompressor(climber));
+    new JoystickButton(operatorController, 7).whenPressed(new EnableCompressor(climber, CompressorState.ON));
   }
   
   public static Command getAutonomousCommand() {

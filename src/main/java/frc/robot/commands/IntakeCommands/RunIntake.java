@@ -6,7 +6,7 @@ import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
   public final Intake intake;
-  public double speed;
+  public final double speed;
 
   public RunIntake(Intake intake, double speed) {
     this.intake = intake;

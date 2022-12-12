@@ -3,14 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
     public static final class DriveBaseConstants {
 
@@ -32,7 +24,7 @@ public final class Constants {
 
     //Intake Motor ID and information
     public static final int INTAKE_ID = 28;
-    public static final int INTAKE_ROTATION_ID = 0;
+    public static final int INTAKE_ROTATION_ID = 50;
     public static final int INTAKE_CHANNEL = 8;
     public static final double MAX_SPEED_DRIVE_INTAKE = 0.2;
     public static final double INTAKE_SPEED = 0.8;
@@ -70,8 +62,8 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
-        public static final double ks = 0.64503;
-        public static final double kv = 2.2412; //2.5412
-        public static final double ka = 0.55051;
+        public static final double ks = 0.66411; //0.64503
+        public static final double kv = 2.3495; //2.5412 //2.2412
+        public static final double ka = 0.57297; //0.55051
     }
 }
